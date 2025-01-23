@@ -1,0 +1,235 @@
+# Root Directory
+.DS_Store
+.env
+.env.*
+*.log
+.git/
+
+#########################
+# Backend (Django)
+#########################
+# Basics
+backend/__pycache__/
+backend/*/__pycache__/
+backend/*/*/__pycache__/
+backend/*/*/*/__pycache__/
+backend/*.py[cod]
+backend/**/*.py[cod]
+backend/*$py.class
+*.so
+
+# Virtual Environment (multiple possible names)
+backend/venv/
+backend/env/
+backend/.env/
+backend/virtualenv/
+backend/.venv/
+backend/ENV/
+backend/.ENV/
+**/venv/
+**/env/
+
+# Environment Variables - All Possible Locations
+backend/.env
+backend/.env.local
+backend/.env.development
+backend/.env.production
+backend/.env.test
+backend/**/.env
+backend/.env.*
+
+# Django Specific
+backend/db.sqlite3
+backend/db.sqlite3-journal
+backend/**/migrations/*.py
+!backend/**/migrations/__init__.py
+backend/local_settings.py
+
+# Media & Static Files
+backend/media/
+backend/static/
+backend/staticfiles/
+backend/mediafiles/
+backend/assets/
+backend/**/media/
+backend/uploads/
+backend/**/uploads/
+backend/user_uploads/
+backend/profile_pics/
+backend/**/static/
+backend/collected_static/
+
+# Coverage & Testing
+backend/.coverage
+backend/.coverage.*
+backend/htmlcov/
+backend/.pytest_cache/
+backend/.tox/
+backend/coverage.xml
+backend/.hypothesis/
+backend/test-reports/
+
+# Logs & Temp Files
+backend/logs/
+backend/*.log
+backend/**/*.log
+backend/tmp/
+backend/temp/
+
+#########################
+# Frontend (React)
+#########################
+# Dependencies
+frontend/node_modules/
+**/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+frontend/package-lock.json
+frontend/yarn.lock
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output
+frontend/cypress/videos/
+frontend/cypress/screenshots/
+
+# Production Build
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/out/
+frontend/storybook-static/
+
+# Development & Environment
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+frontend/.env.development.local
+frontend/.env.test
+frontend/.env.test.local
+frontend/.env.production
+frontend/.env.production.local
+frontend/**/.env*
+
+# Caches
+frontend/.cache/
+frontend/.parcel-cache/
+frontend/.eslintcache
+frontend/.stylelintcache
+frontend/.webpack/
+frontend/.next/cache/
+
+# Logs
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/debug.log*
+frontend/*.log
+
+# TypeScript
+frontend/**/*.tsbuildinfo
+frontend/next-env.d.ts
+
+# PWA Files
+frontend/public/sw.js*
+frontend/public/workbox-*.js*
+frontend/public/worker-*.js*
+frontend/public/fallback-*.js*
+
+#########################
+# IDE & Editors
+#########################
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+out/
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+*~
+*.swp
+*.swo
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+#########################
+# Project Specific
+#########################
+# User Uploads
+**/uploads/
+**/user_content/
+**/profile_pictures/
+**/post_images/
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.orig
+*.temp
+*.tmp
+
+# Local Development
+docker-compose.override.yml
+.docker/
+*.local
+
+# Deployment
+.vercel
+.netlify
+.deploy/
+deploy.config.js
+
+# Dependencies & Lock Files
+**/package-lock.json
+**/yarn.lock
+**/pnpm-lock.yaml
+**/poetry.lock
+**/Pipfile.lock
+
+# Generated Files
+**/generated/
+**/dist/
+**/build/
+**/.build/
+**/compiled/
