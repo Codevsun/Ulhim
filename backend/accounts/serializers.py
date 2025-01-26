@@ -24,6 +24,7 @@ class StudentUserSerializer(serializers.ModelSerializer):
             "interests",
             "password",
             "username",
+            "profile_image",
         ]
 
     def validate_uni_email(self, value):

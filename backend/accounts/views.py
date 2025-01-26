@@ -112,8 +112,8 @@ class TokenView(APIView):
 
         except StudentUser.DoesNotExist:
             return Response(
-                {"error": "No account found with this email."},
-                status=status.HTTP_404_NOT_FOUND,
+                {"error": "Invalid credentials."},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
 
@@ -129,31 +129,34 @@ class ProfileView(APIView):
                 "last_name": user.last_name,
                 "skills": user.skills,
                 "interests": user.interests,
+                "profile_image": user.profile_image.url if user.profile_image else None,
             }
         )
 
 
 class RefreshTokenView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can log out
+    permission_classes = []
 
     def post(self, request):
-        refresh_token = request.data.get("refresh_token")
-        if not refresh_token:
-            return Response(
-                {"error": "Refresh token is required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
         try:
+            # Get the refresh token from the request body
+            refresh_token = request.data.get("refresh_token")
+            if not refresh_token:
+                return Response(
+                    {"error": "Refresh token is required."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
             # Blacklist the refresh token
             token = RefreshToken(refresh_token)
-            token.blacklist()
+            token.blacklist()  # Add the token to the blacklist
 
             return Response(
-                {"message": "Successfully logged out."}, status=status.HTTP_200_OK
+                {"message": "Successfully logged out."},
+                status=status.HTTP_200_OK,
             )
-        except TokenError as e:
+        except Exception as e:
             return Response(
-                {"error": "Invalid or expired token."},
+                {"error": "Invalid or expired refresh token."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
