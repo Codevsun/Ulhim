@@ -3,6 +3,6 @@ import random
 
 def generate_otp():
     """
-    Generate a 6-digit OTP.
+    Generate a 5-digit OTP.
     """
-    return str(random.randint(100000, 999999))
+    return str(random.randint(10000, 99999))

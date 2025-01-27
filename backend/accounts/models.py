@@ -69,7 +69,7 @@ class StudentUser(AbstractUser):
     is_email_verified = models.BooleanField(
         default=False, verbose_name="Email Verified"
     )
-    otp = models.CharField(max_length=6, blank=True, null=True, verbose_name="OTP")
+    otp = models.CharField(max_length=5, blank=True, null=True, verbose_name="OTP")
 
     objects = StudentUserManager()
 
