@@ -1,14 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated  # <-- Add this
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import StudentUser
 from .serializers import StudentUserSerializer
-from .utils import generate_otp
-from django.core.mail import send_mail
-from django.conf import settings
+from .utils import generate_otp_send_email, expire_otp, is_otp_expired
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError
 
 
 class RegisterView(APIView):
@@ -19,16 +16,7 @@ class RegisterView(APIView):
         serializer = StudentUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            otp = generate_otp()
-            user.otp = otp
-            user.save()
-            send_mail(
-                "Verify Your Email",
-                f"Your OTP is: {otp}",
-                settings.EMAIL_HOST_USER,
-                [user.uni_email],
-                fail_silently=False,
-            )
+            generate_otp_send_email(user)
             return Response(
                 {"message": "OTP sent to your email."}, status=status.HTTP_201_CREATED
             )
@@ -44,8 +32,15 @@ class VerifyEmailView(APIView):
         otp = request.data.get("otp")
         try:
             user = StudentUser.objects.get(uni_email=email, otp=otp)
+            if is_otp_expired(user):
+                expire_otp(user)
+                return Response(
+                    {"error": "OTP expired. Please request a new OTP."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
             user.is_email_verified = True
-            user.otp = None  # Clear the OTP after verification
+            user.otp = None
+            user.otp_expiration = None
             user.save()
             return Response(
                 {"message": "Email verified successfully."},
@@ -70,7 +65,7 @@ def set_cookie(response, key, value, expires_in):
 
 class TokenView(APIView):
     authentication_classes = []  # Disable authentication
-    permission_classes = []  # Allow unauthenticated access
+    permission_classes = [AllowAny]  # Allow unauthenticated access
 
     def post(self, request):
         uni_email = request.data.get("uni_email")
@@ -135,7 +130,7 @@ class ProfileView(APIView):
 
 
 class RefreshTokenView(APIView):
-    permission_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         try:
@@ -159,4 +154,71 @@ class RefreshTokenView(APIView):
             return Response(
                 {"error": "Invalid or expired refresh token."},
                 status=status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class RequestOTPView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        uni_email = request.data.get("uni_email")
+        if not uni_email:
+            return Response(
+                {"error": "Email is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            user = StudentUser.objects.get(uni_email=uni_email)
+            generate_otp_send_email(user)
+            return Response(
+                {"message": "OTP sent to your email."},
+                status=status.HTTP_200_OK,
+            )
+        except StudentUser.DoesNotExist:
+            return Response(
+                {"error": "User not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
+            print(e)
+            return Response(
+                {"error": "An error occurred while sending the OTP."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class ResetPasswordView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        uni_email = request.data.get("uni_email")
+        new_password = request.data.get("new_password")
+        if not uni_email or not new_password:
+            return Response(
+                {"error": "Both email and password are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        
+        try:
+            user = StudentUser.objects.get(uni_email=uni_email)
+            if not user.is_email_verified:
+                return Response(
+                    {"error": "Email not verified. Please check your inbox."},
+                    status=status.HTTP_401_UNAUTHORIZED,
+                )
+            user.set_password(new_password)
+            user.save()
+            return Response(
+                {"message": "Password reset successfully."},
+                status=status.HTTP_200_OK,
+            )
+        except StudentUser.DoesNotExist:
+            return Response(
+                {"error": "Invalid OTP or email."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {"error": "An error occurred while resetting the password."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
