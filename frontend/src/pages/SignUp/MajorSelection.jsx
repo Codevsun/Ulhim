@@ -23,7 +23,6 @@ const MajorSelection = ({ onNext }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-      {/* Logo in the Top-Left Corner */}
       <div className="absolute top-4 left-4">
         <Logo />
       </div>
@@ -48,8 +47,6 @@ const MajorSelection = ({ onNext }) => {
 
         {/* Error Message */}
         {error && <p className="text-red-500 text-xs mt-2 w-full text-left">Please select your major</p>}
-
-        {/* Next Button */}
         <div className="mt-6 flex justify-center">
           <Button text="Next" onClick={handleNextClick} />
         </div>
