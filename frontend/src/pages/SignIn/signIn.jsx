@@ -89,8 +89,6 @@ const SignIn = ({ onSignup, onSignIn, onForgotPassword }) => {
               </p>
             )}
           </div>
-
-          {/* Password Input with Eye Icon */}
           <div className="relative w-full mt-4">
             <InputField
               placeholder="Password"
