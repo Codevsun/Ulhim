@@ -35,7 +35,6 @@ const SkillSelection = ({ onNext }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white px-6">
-      {/* Logo in the Top-Left Corner */}
       <div className="absolute top-4 left-4">
         <Logo />
       </div>
@@ -45,7 +44,7 @@ const SkillSelection = ({ onNext }) => {
         <ProgressBar steps={["Verify Email", "Details", "Done"]} currentStep={step} />
       </div>*/}
 
-      {/* Skills Selection */}
+    
       <div className="w-full max-w-3xl text-center p-6">
         <h2 className="text-lg font-semibold mb-4">What skills define you?</h2>
 
