@@ -103,7 +103,7 @@ export function SkillsSelection({ onNext }) {
         )}
 
         <Button type="submit">
-          Skip
+          continue
         </Button>
       </form>
     </div>

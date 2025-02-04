@@ -91,7 +91,7 @@ export function InterestsSelection({ onNext }) {
           </div>
         )}
         <Button type="submit">
-          skip
+          continue
         </Button>
       </form>
     </div>

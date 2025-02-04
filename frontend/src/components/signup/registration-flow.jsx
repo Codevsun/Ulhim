@@ -90,13 +90,13 @@ export function RegistrationFlow() {
       {isEmailVerified && (
         <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-8 mb-12">
           <div className="flex items-center justify-between">
-            {['Verify Email', 'Your Details', 'Done'].map((step, index) => (
+          {['Verify Email', 'Your Details', 'Done'].map((step, index) => (
               <div key={index} className="flex flex-col items-center relative">
                 {/* Connecting Lines */}
                 {index < 2 && (
                   <>
                     <div 
-                      className={`hidden sm:block absolute left-[calc(100%+4rem)] top-6 h-[3px] w-[calc(200%-1rem)] ${
+                      className={`hidden sm:block absolute left-[calc(100%+4rem)] top-6 h-[2px] w-[calc(200%-1rem)] ${
                         currentStep > index * 3 ? 'bg-blue-500' : 'bg-gray-700'
                       }`}
                     />
@@ -111,7 +111,7 @@ export function RegistrationFlow() {
                 {/* Circle */}
                 <div
                   className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center ${
-                    currentStep >= index * 3 ? 'bg-blue-500' : 'bg-gray-700'
+                    currentStep >= index * 3 ? 'border-blue-500 border-2' : 'border-gray-700 border-2'
                   }`}
                 >
                   {currentStep > index * 3 ? (
