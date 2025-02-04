@@ -1,0 +1,15 @@
+@keyframes grid-movement {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(50px); }
+}
+
+@keyframes scanline {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+@keyframes float-0 { 0% { transform: translate(0, 0); } 100% { transform: translate(20px, 20px); } }
+@keyframes float-1 { 0% { transform: translate(0, 0); } 100% { transform: translate(-20px, 30px); } }
+@keyframes float-2 { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -20px); } }
+@keyframes float-3 { 0% { transform: translate(0, 0); } 100% { transform: translate(-30px, -30px); } }
+@keyframes float-4 { 0% { transform: translate(0, 0); } 100% { transform: translate(25px, -25px); } } 
