@@ -41,13 +41,13 @@ const SignIn = ({ onSignup, onSignIn, onForgotPassword }) => {
     e.preventDefault();
 
     // Validate email
-    if (!email.endsWith("@iau.edu.sa")) {
-      setEmailError("Email must be a university email (@iau.edu.sa)");
-      setIsValidEmail(false);
-    } else {
-      setEmailError("");
-      setIsValidEmail(true);
-    }
+    // if (!email.endsWith("@iau.edu.sa")) {
+    //   setEmailError("Email must be a university email (@iau.edu.sa)");
+    //   setIsValidEmail(false);
+    // } else {
+    //   setEmailError("");
+    //   setIsValidEmail(true);
+    // }
 
     // If both email and password are valid, proceed with sign-in
     if (isValidEmail && !passwordError && email && password) {

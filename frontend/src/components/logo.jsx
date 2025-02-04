@@ -1,11 +1,12 @@
-// src/components/Logo.jsx
 import React from 'react';
+import logo from '../assets/images/Ulhim-logo.png';  // Add this import
 
 const Logo = () => {
+
   return (
     <div className="mb-2">
-      <img src="/Ulhim-logo.png" alt="Logo" className="w-16 h-auto" />
-    </div>
+        <img src={logo} alt="Logo" className="w-16 h-auto" />
+        </div>
   );
 };
 

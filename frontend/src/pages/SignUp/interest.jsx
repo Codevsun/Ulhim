@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import ProgressBar from "../../components/Progressbar";
 import Logo from "../../components/Logo";
 import Button from "../../components/Button";
 
