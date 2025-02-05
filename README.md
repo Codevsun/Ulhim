@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Ulhim Logo](frontend/src/assets/images/ulhim.png)
+![Ulhim Logo](frontend/src/assets/Rm-logo.png)
 
 A platform empowering students to celebrate achievements and build meaningful connections.
 
@@ -55,7 +55,7 @@ A platform empowering students to celebrate achievements and build meaningful co
 - **React 18** - Modern UI development
 - **Tailwind CSS** - Responsive styling
 - **React Query** - Efficient data fetching
-- **React Router** - Seamless navigation
+- **React vV** - Seamless navigation
 
 
 
@@ -107,7 +107,7 @@ Ensure you have the following installed:
    python manage.py runserver
 
    # Frontend (in a new terminal)
-   npm start
+   npm run dev
    ```
 
 
