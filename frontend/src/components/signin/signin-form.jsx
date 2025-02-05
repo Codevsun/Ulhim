@@ -84,27 +84,48 @@ export function SignInForm() {
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center text-white">
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center text-white ">
       {/* Logo at top center */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20">
         <Logo className="scale-[2]" />
       </div>
 
-      {/* Dark, striking background */}
+      {/* Modern spotlights with higher z-index and opacity */}
+      <div className="absolute inset-0 overflow-hidden z-10 pointer-events-none">
+        <div 
+          className="absolute w-[500px] h-[500px] blur-[100px] rounded-full mix-blend-screen"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(124, 58, 237, 0.4), transparent 70%)',
+            left: `${mousePosition.x * 100}%`,
+            top: `${mousePosition.y * 100}%`,
+            transform: 'translate(-50%, -50%)',
+            transition: 'all 0.3s ease-out',
+          }}
+        />
+        <div 
+          className="absolute w-[800px] h-[800px] blur-[120px] rounded-full mix-blend-screen"
+          style={{
+            background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.3), transparent 70%)',
+            left: `${(1 - mousePosition.x) * 100}%`,
+            top: `${(1 - mousePosition.y) * 100}%`,
+            transform: 'translate(-50%, -50%)',
+            transition: 'all 0.3s ease-out',
+          }}
+        />
+      </div>
+
+      {/* Dark background with reduced opacity */}
       <div 
-        className="absolute inset-0 bg-black bg-opacity-80 backdrop-blur-[100px]"
+        className="absolute inset-0 bg-black/70 backdrop-blur-[100px] z-0"
         style={{
           backgroundImage: `
-            radial-gradient(circle at 50% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 60%),
-            radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 60%),
-            linear-gradient(to bottom right, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.9) 100%)
+            linear-gradient(to bottom right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%)
           `,
-          backgroundBlendMode: 'screen',
         }}
       />
 
       {/* Animated grid overlay */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden z-0">
         <div 
           className="absolute inset-0"
           style={{
@@ -128,7 +149,7 @@ export function SignInForm() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="relative z-10 w-full max-w-md mx-auto px-4"
+          className="relative z-20 w-full max-w-md mx-auto px-4"
         >
           <div className="space-y-8">
             <motion.div 
@@ -137,7 +158,7 @@ export function SignInForm() {
               transition={{ duration: 0.2 }}
               className="text-center space-y-6"
             >
-              <h1 className="text-4xl font-bold tracking-tight">
+              <h1 className="text-4xl font-bold tracking-tight  ">
                 Welcome Back
               </h1>
               <p className="text-lg text-gray-400">

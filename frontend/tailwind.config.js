@@ -4,6 +4,10 @@ export default {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+		fontFamily: {
+			sans: ['Trap', 'system-ui', 'sans-serif'],
+			roboto: ['Roboto', 'system-ui', 'sans-serif'],
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -54,7 +58,8 @@ export default {
 				500: '#3B82F6',
 				600: '#2563EB',
 			  },
-  		}
+  		},
+  		
   	}
   },
   plugins: [import("tailwindcss-animate")],

@@ -5,7 +5,7 @@ import { ForgotPasswordFlow } from './components/forgot-password/forgot-password
 function App() {
   return (
     <Router>
-      <Routes>
+      <Routes >
         <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signup/*" element={<SignUpPage />} />
         <Route path="/signin" element={<SignInPage />} />

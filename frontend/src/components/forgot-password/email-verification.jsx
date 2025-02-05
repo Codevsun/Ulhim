@@ -30,7 +30,7 @@ export function EmailVerification({ onNext }) {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold mb-2">Verify your email</h1>
+        <h1 className="text-3xl font-bold mb-2">Forgot Password?</h1>
         <p className="text-gray-400">Enter your email to receive a one-time passcode for resetting your password</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
