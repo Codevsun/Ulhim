@@ -23,6 +23,14 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class TestView(APIView):
+    authentication_classes = []  # Disable authentication
+    permission_classes = [AllowAny]  # Allow unauthenticated access
+
+    def get(self, request):
+        return Response({"message": "Hello, world!"}, status=status.HTTP_200_OK)
+
+
 class VerifyEmailView(APIView):
     authentication_classes = []  # Disable authentication
     permission_classes = [AllowAny]  # Allow unauthenticated access
@@ -222,3 +230,4 @@ class ResetPasswordView(APIView):
                 {"error": "An error occurred while resetting the password."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
+

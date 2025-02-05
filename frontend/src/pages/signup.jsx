@@ -6,4 +6,4 @@ export function SignUpPage() {
       <RegistrationFlow />
     </div>
   )
-} 
+}
