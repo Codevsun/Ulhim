@@ -82,9 +82,20 @@ export function RegistrationFlow() {
       const yearNumber = parseInt(formData.year_in_college?.replace('Year ', '')) || null
 
       const registrationData = {
-        ...formData,
+        uni_email: formData.uni_email,
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        phone: formData.phone,
         year_in_college: yearNumber,
+        major: formData.major,
+        skills: Array.isArray(formData.skills) ? formData.skills : [],
+        interests: Array.isArray(formData.interests) ? formData.interests : [],
+        password: formData.password,
+        username: formData.username || '',
+        profile_image: formData.profile_image
       }
+
+      console.log('Sending registration data:', registrationData) // Debug log
 
       const response = await api.post('register/', registrationData)
 
@@ -92,19 +103,15 @@ export function RegistrationFlow() {
         setCurrentStep(steps.length - 1)
       }
     } catch (error) {
-      console.error('Registration error:', error)
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        setRegistrationError(
-          error.response.data.message || 'Registration failed. Please try again.'
-        )
-      } else if (error.request) {
-        // The request was made but no response was received
-        setRegistrationError('No response from server. Please check your connection.')
+      console.error('Registration error:', error.response?.data || error)
+      if (error.response?.data) {
+        // Handle specific error messages from backend
+        const errorMessage = typeof error.response.data === 'object' 
+          ? Object.values(error.response.data)[0]
+          : error.response.data
+        setRegistrationError(errorMessage)
       } else {
-        // Something happened in setting up the request that triggered an Error
-        setRegistrationError('An error occurred. Please try again.')
+        setRegistrationError('Registration failed. Please try again.')
       }
     }
   }
@@ -222,7 +229,11 @@ export function RegistrationFlow() {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <CurrentStep onNext={handleStepSubmit} formData={formData} />
+            <CurrentStep
+              onNext={handleStepSubmit}
+              formData={formData}
+              isEmailVerified={isEmailVerified}
+            />
           </motion.div>
         </AnimatePresence>
       </div>
@@ -231,9 +242,9 @@ export function RegistrationFlow() {
       {showOtpModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <OtpVerification
-            onClose={() => setShowOtpModal(false)}
-            onNext={handleOtpVerified}
             email={formData.uni_email}
+            onNext={handleOtpVerified}
+            onClose={() => setShowOtpModal(false)}
           />
         </div>
       )}

@@ -37,7 +37,13 @@ export function InterestsSelection({ onNext }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onNext()
+    if (selectedInterests.length === 0) {
+      // You might want to show an error message
+      return
+    }
+    // Remove 'Other' from interests if present
+    const finalInterests = selectedInterests.filter(interest => interest !== 'Other')
+    onNext({ interests: finalInterests })
   }
 
   const handleAddCustomInterest = () => {
@@ -90,7 +96,7 @@ export function InterestsSelection({ onNext }) {
             </button>
           </div>
         )}
-        <Button type="submit">
+        <Button type="submit" disabled={selectedInterests.length === 0}>
           continue
         </Button>
       </form>
