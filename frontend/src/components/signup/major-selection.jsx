@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { Button } from '../ui/button'
 
 const majors = [
-  "Computer Science",
-  "Computer Information System", 
-  "Cyber Security",
-  "Artificial Intelligence"
+  'Computer Science',
+  'Computer Information System',
+  'Cyber Security',
+  'Artificial Intelligence',
 ]
 
 export function MajorSelection({ onNext }) {
@@ -20,7 +20,7 @@ export function MajorSelection({ onNext }) {
       return
     }
     setError('')
-    onNext()
+    onNext({ major: selectedMajor })
   }
 
   const handleMajorSelect = (major) => {
@@ -32,17 +32,17 @@ export function MajorSelection({ onNext }) {
 
   return (
     <div className="space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-2xl font-bold mb-2">What is your major?</h1>
-        <p className="text-gray-400 text-sm">Select your field of study from the options below</p>
+      <div className="space-y-4 text-center">
+        <h1 className="mb-2 text-2xl font-bold">What is your major?</h1>
+        <p className="text-sm text-gray-400">Select your field of study from the options below</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
           {majors.map((major) => (
-            <label 
-              key={major} 
-              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+            <label
+              key={major}
+              className="flex cursor-pointer items-center space-x-3 rounded-lg p-3 transition-colors hover:bg-gray-800"
             >
               <input
                 type="radio"
@@ -57,16 +57,10 @@ export function MajorSelection({ onNext }) {
           ))}
         </div>
 
-        {error && (
-          <p className="text-red-500 text-sm text-center">{error}</p>
-        )}
+        {error && <p className="text-center text-sm text-red-500">{error}</p>}
 
         <div className="pt-4">
-          <Button 
-            type="submit" 
-            disabled={!selectedMajor}
-            className="w-full"
-          >
+          <Button type="submit" disabled={!selectedMajor} className="w-full">
             Next
           </Button>
         </div>
@@ -76,5 +70,5 @@ export function MajorSelection({ onNext }) {
 }
 
 MajorSelection.propTypes = {
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 }

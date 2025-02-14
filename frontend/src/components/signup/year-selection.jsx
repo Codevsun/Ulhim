@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Button } from '../ui/button'
 
-const years = ["Year 1", "Year 2", "Year 3", "Year 4", "Year 5"]
+const years = ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5']
 
 export function YearSelection({ onNext }) {
   const [selectedYear, setSelectedYear] = useState('')
@@ -15,7 +15,7 @@ export function YearSelection({ onNext }) {
       return
     }
     setError('')
-    onNext()
+    onNext({ year_in_college: selectedYear })
   }
 
   const handleYearSelect = (year) => {
@@ -27,16 +27,16 @@ export function YearSelection({ onNext }) {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-4">
-        <h1 className="text-2xl font-bold mb-2">What year are you?</h1>
-        <p className="text-gray-400 text-sm">Select your current academic year</p>
+      <div className="space-y-4 text-center">
+        <h1 className="mb-2 text-2xl font-bold">What year are you?</h1>
+        <p className="text-sm text-gray-400">Select your current academic year</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-4">
           {years.map((year) => (
-            <label 
-              key={year} 
-              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+            <label
+              key={year}
+              className="flex cursor-pointer items-center space-x-3 rounded-lg p-3 transition-colors hover:bg-gray-800"
             >
               <input
                 type="radio"
@@ -50,17 +50,13 @@ export function YearSelection({ onNext }) {
             </label>
           ))}
         </div>
-        {error && (
-          <p className="text-red-500 text-sm">{error}</p>
-        )}
-        <Button type="submit">
-          Next
-        </Button>
+        {error && <p className="text-sm text-red-500">{error}</p>}
+        <Button type="submit">Next</Button>
       </form>
     </div>
   )
 }
 
 YearSelection.propTypes = {
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 }

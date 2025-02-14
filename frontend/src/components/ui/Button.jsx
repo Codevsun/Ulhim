@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-export function Button({ children, type = 'button', className = '', onClick, ...props }) {
+export function Button({ children = 'Button', type = 'button', className = '', onClick, ...props }) {
   return (
     <button
       type={type}

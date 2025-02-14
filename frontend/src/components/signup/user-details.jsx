@@ -14,19 +14,19 @@ export function UserDetails({ onNext }) {
 
   const [errors, setErrors] = useState({
     firstName: '',
-    lastName: '', 
+    lastName: '',
     phone: '',
     username: '',
-    password: ''
+    password: '',
   })
 
   const validateForm = () => {
     const newErrors = {}
-    
+
     if (!formData.firstName.trim()) {
       newErrors.firstName = 'First name is required'
     }
-    
+
     if (!formData.lastName.trim()) {
       newErrors.lastName = 'Last name is required'
     }
@@ -47,7 +47,9 @@ export function UserDetails({ onNext }) {
       newErrors.password = 'Password is required'
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters'
-    } else if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/.test(formData.password)) {
+    } else if (
+      !/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]/.test(formData.password)
+    ) {
       newErrors.password = 'Password should include letters, numbers and special characters'
     }
 
@@ -57,37 +59,31 @@ export function UserDetails({ onNext }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }))
+      setErrors((prev) => ({ ...prev, [name]: '' }))
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    
-    // Show all field errors if form is empty
-    if (Object.values(formData).every(value => !value.trim())) {
-      setErrors({
-        firstName: 'First name is required',
-        lastName: 'Last name is required',
-        phone: 'Phone number is required',
-        username: 'Username is required',
-        password: 'Password is required'
-      })
-      return
-    }
 
     if (validateForm()) {
-      onNext()
+      onNext({
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        phone: formData.phone,
+        username: formData.username,
+        password: formData.password,
+      })
     }
   }
 
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold mb-2">Enter your details</h1>
+        <h1 className="mb-2 text-2xl font-bold">Enter your details</h1>
       </div>
       <form onSubmit={handleSubmit} className="space-y-8">
         <Input
@@ -135,17 +131,15 @@ export function UserDetails({ onNext }) {
             onChange={handleChange}
             error={errors.password}
           />
-          <p className="text-gray-400 text-sm">Password must be at least 8 characters long</p>
+          <p className="text-sm text-gray-400">Password must be at least 8 characters long</p>
         </div>
 
-        <Button type="submit">
-          Next
-        </Button>
+        <Button type="submit">Next</Button>
       </form>
     </div>
   )
 }
 
 UserDetails.propTypes = {
-  onNext: PropTypes.func.isRequired
+  onNext: PropTypes.func.isRequired,
 }

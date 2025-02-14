@@ -7,9 +7,9 @@ from datetime import timedelta
 
 def generate_otp():
     """
-    Generate a 5-digit OTP.
+    Generate a 4-digit OTP.
     """
-    return str(random.randint(10000, 99999))
+    return str(random.randint(1000, 9999))
 
 
 def generate_otp_send_email(user):

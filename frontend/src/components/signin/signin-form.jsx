@@ -9,13 +9,13 @@ import { Sparkles } from '../ui/Sparkles'
 export function SignInForm() {
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
   })
 
   const [errors, setErrors] = useState({
     email: '',
     password: '',
-    form: ''
+    form: '',
   })
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -24,7 +24,7 @@ export function SignInForm() {
     const handleMouseMove = (e) => {
       setMousePosition({
         x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight
+        y: e.clientY / window.innerHeight,
       })
     }
 
@@ -39,8 +39,8 @@ export function SignInForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-    setErrors(prev => ({ ...prev, [name]: '', form: '' }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    setErrors((prev) => ({ ...prev, [name]: '', form: '' }))
   }
 
   const handleSubmit = async (e) => {
@@ -68,44 +68,46 @@ export function SignInForm() {
       if (formData.email === 'test@iau.edu.sa' && formData.password === 'wrong') {
         setErrors({
           ...errors,
-          form: 'Invalid email or password'
+          form: 'Invalid email or password',
         })
         return
       }
-      
+
       // Handle successful login
       console.log('Login successful')
     } catch (errors) {
       setErrors({
         ...errors,
-        form: 'An error occurred. Please try again.'
+        form: 'An error occurred. Please try again.',
       })
     }
   }
 
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center text-white ">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden text-white">
       {/* Logo at top center */}
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20">
+      <div className="absolute left-1/2 top-12 z-20 -translate-x-1/2">
         <Logo className="scale-[2]" />
       </div>
 
       {/* Modern spotlights with higher z-index and opacity */}
-      <div className="absolute inset-0 overflow-hidden z-10 pointer-events-none">
-        <div 
-          className="absolute w-[500px] h-[500px] blur-[100px] rounded-full mix-blend-screen"
+      <div className="pointer-events-none absolute inset-0 z-10 overflow-hidden">
+        <div
+          className="absolute h-[500px] w-[500px] rounded-full mix-blend-screen blur-[100px]"
           style={{
-            background: 'radial-gradient(circle at center, rgba(124, 58, 237, 0.4), transparent 70%)',
+            background:
+              'radial-gradient(circle at center, rgba(124, 58, 237, 0.4), transparent 70%)',
             left: `${mousePosition.x * 100}%`,
             top: `${mousePosition.y * 100}%`,
             transform: 'translate(-50%, -50%)',
             transition: 'all 0.3s ease-out',
           }}
         />
-        <div 
-          className="absolute w-[800px] h-[800px] blur-[120px] rounded-full mix-blend-screen"
+        <div
+          className="absolute h-[800px] w-[800px] rounded-full mix-blend-screen blur-[120px]"
           style={{
-            background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.3), transparent 70%)',
+            background:
+              'radial-gradient(circle at center, rgba(139, 92, 246, 0.3), transparent 70%)',
             left: `${(1 - mousePosition.x) * 100}%`,
             top: `${(1 - mousePosition.y) * 100}%`,
             transform: 'translate(-50%, -50%)',
@@ -115,8 +117,8 @@ export function SignInForm() {
       </div>
 
       {/* Dark background with reduced opacity */}
-      <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-[100px] z-0"
+      <div
+        className="absolute inset-0 z-0 bg-black/70 backdrop-blur-[100px]"
         style={{
           backgroundImage: `
             linear-gradient(to bottom right, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.8) 100%)
@@ -125,8 +127,8 @@ export function SignInForm() {
       />
 
       {/* Animated grid overlay */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <div 
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
@@ -139,42 +141,40 @@ export function SignInForm() {
           }}
         />
       </div>
-      
+
       <Sparkles />
 
       <AnimatePresence mode="wait">
-        <motion.div 
+        <motion.div
           key="signin-form"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="relative z-20 w-full max-w-md mx-auto px-4"
+          className="relative z-20 mx-auto w-full max-w-md px-4"
         >
           <div className="space-y-8">
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.2 }}
-              className="text-center space-y-6"
+              className="space-y-6 text-center"
             >
-              <h1 className="text-4xl font-bold tracking-tight  ">
-                Welcome Back
-              </h1>
+              <h1 className="text-4xl font-bold tracking-tight">Welcome Back</h1>
               <p className="text-lg text-gray-400">
                 Uncover the untapped potential of your growth to connect with similar students !!
               </p>
             </motion.div>
 
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              onSubmit={handleSubmit} 
+              onSubmit={handleSubmit}
               className="space-y-6"
             >
               {errors.form && (
-                <div className="text-red-500 text-sm text-center bg-red-500/10 py-2 rounded">
+                <div className="rounded bg-red-500/10 py-2 text-center text-sm text-red-500">
                   {errors.form}
                 </div>
               )}
