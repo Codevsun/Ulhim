@@ -38,12 +38,12 @@ export function InterestsSelection({ onNext }) {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (selectedInterests.length === 0) {
-      // You might want to show an error message
       return
     }
     // Remove 'Other' from interests if present
     const finalInterests = selectedInterests.filter(interest => interest !== 'Other')
     onNext({ interests: finalInterests })
+    console.log(finalInterests)
   }
 
   const handleAddCustomInterest = () => {

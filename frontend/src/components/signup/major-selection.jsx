@@ -4,7 +4,7 @@ import { Button } from '../ui/button'
 
 const majors = [
   'Computer Science',
-  'Computer Information System',
+  'Computer Information Systems',
   'Cyber Security',
   'Artificial Intelligence',
 ]

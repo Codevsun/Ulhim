@@ -57,45 +57,55 @@ export function RegistrationFlow() {
   }, [])
 
   const handleStepSubmit = async (stepData) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...stepData,
-    }))
+    
+    setFormData((prev) => {
+      const newData = {
+        ...prev,
+        ...stepData,
+      }
+      return newData
+    })
 
     if (currentStep === 0) {
       setShowOtpModal(true)
-
       return
     }
 
     if (currentStep === steps.length - 2) {
-      handleRegistration()
+      // Wait for state update to complete
+      setTimeout(() => {
+        const updatedFormData = {
+          ...formData,
+          ...stepData
+        }
+    
+        handleRegistration(updatedFormData)
+      }, 0)
       return
     }
 
     setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
   }
 
-  const handleRegistration = async () => {
+  const handleRegistration = async (registrationFormData) => {
     try {
       setRegistrationError('')
-      const yearNumber = parseInt(formData.year_in_college?.replace('Year ', '')) || null
+      const yearNumber = parseInt(registrationFormData.year_in_college?.replace('Year ', '')) || null
 
       const registrationData = {
-        uni_email: formData.uni_email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        phone: formData.phone,
+        uni_email: registrationFormData.uni_email,
+        first_name: registrationFormData.first_name,
+        last_name: registrationFormData.last_name,
+        phone: registrationFormData.phone,
         year_in_college: yearNumber,
-        major: formData.major,
-        skills: Array.isArray(formData.skills) ? formData.skills : [],
-        interests: Array.isArray(formData.interests) ? formData.interests : [],
-        password: formData.password,
-        username: formData.username || '',
-        profile_image: formData.profile_image
+        major: registrationFormData.major,
+        skills: Array.isArray(registrationFormData.skills) ? registrationFormData.skills : [],
+        interests: Array.isArray(registrationFormData.interests) ? registrationFormData.interests : [],
+        password: registrationFormData.password,
+        username: registrationFormData.username || '',
+        profile_image: registrationFormData.profile_image,
       }
 
-      console.log('Sending registration data:', registrationData) // Debug log
 
       const response = await api.post('register/', registrationData)
 
@@ -106,9 +116,10 @@ export function RegistrationFlow() {
       console.error('Registration error:', error.response?.data || error)
       if (error.response?.data) {
         // Handle specific error messages from backend
-        const errorMessage = typeof error.response.data === 'object' 
-          ? Object.values(error.response.data)[0]
-          : error.response.data
+        const errorMessage =
+          typeof error.response.data === 'object'
+            ? Object.values(error.response.data)[0]
+            : error.response.data
         setRegistrationError(errorMessage)
       } else {
         setRegistrationError('Registration failed. Please try again.')
