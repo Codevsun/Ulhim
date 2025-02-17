@@ -28,7 +28,11 @@ export function EmailVerification({ onNext }) {
       await api.post('request-otp/', { uni_email: email })
       onNext({ uni_email: email })
     } catch (error) {
-      setError(error.response?.data?.message || 'Failed to send OTP. Please try again.')
+      if (error.response?.data?.error === 'Email already registered and verified.') {
+        setError('This email is already registered. Please sign in instead.')
+      } else {
+        setError(error.response?.data?.error || 'Failed to send OTP. Please try again.')
+      }
     } finally {
       setIsLoading(false)
     }

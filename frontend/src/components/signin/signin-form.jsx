@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Logo } from '../signup/logo'
 import { Sparkles } from '../ui/Sparkles'
-
+import api from '../../services/api'
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constants'
 export function SignInForm() {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -18,6 +20,7 @@ export function SignInForm() {
     form: '',
   })
 
+  const [isLoading, setIsLoading] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
@@ -62,24 +65,29 @@ export function SignInForm() {
       return
     }
 
-    // TODO: Add API integration
+    setIsLoading(true)
     try {
-      // Simulate API call
-      if (formData.email === 'test@iau.edu.sa' && formData.password === 'wrong') {
-        setErrors({
-          ...errors,
-          form: 'Invalid email or password',
-        })
-        return
-      }
+      const response = await api.post('token/', {
+        uni_email: formData.email,
+        password: formData.password
+      })
 
-      // Handle successful login
-      console.log('Login successful')
-    } catch (errors) {
+      // Store tokens in localStorage
+      localStorage.setItem(ACCESS_TOKEN, response.data.access)
+      localStorage.setItem(REFRESH_TOKEN, response.data.refresh)
+
+      // Set the default Authorization header for future requests
+      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`
+
+      // Redirect to dashboard
+      navigate('/home')
+    } catch (error) {
       setErrors({
         ...errors,
-        form: 'An error occurred. Please try again.',
+        form: error.response?.data?.error || 'Invalid email or password'
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -186,6 +194,7 @@ export function SignInForm() {
                 value={formData.email}
                 onChange={handleChange}
                 error={errors.email}
+                disabled={isLoading}
               />
 
               <Input
@@ -195,6 +204,7 @@ export function SignInForm() {
                 value={formData.password}
                 onChange={handleChange}
                 error={errors.password}
+                disabled={isLoading}
               />
 
               <div className="flex items-center justify-between">
@@ -207,8 +217,8 @@ export function SignInForm() {
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Signing in...' : 'Login'}
               </Button>
 
               <p className="text-center text-sm text-gray-400">

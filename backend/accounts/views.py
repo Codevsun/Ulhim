@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterView(APIView):
-    authentication_classes = []  # Disable authentication
+    authentication_classes = []  # Explicitly disable authentication
     permission_classes = [AllowAny]  # Allow unauthenticated access
 
     def post(self, request):
@@ -20,10 +20,17 @@ class RegisterView(APIView):
                 is_active=False
             )
             
+            # Hash the password before passing to serializer
+            data = request.data.copy()
+            if 'password' in data:
+                temp_user.set_password(data['password'])
+                temp_user.save()
+                data.pop('password')  # Remove password from data since it's already set
+            
             # Update the serializer data with the existing user instance
             serializer = StudentUserSerializer(
                 temp_user,
-                data=request.data,
+                data=data,
                 partial=True
             )
             
@@ -70,7 +77,36 @@ class VerifyEmailView(APIView):
         email = request.data.get("uni_email")
         otp = request.data.get("otp")
         try:
-            user = StudentUser.objects.get(uni_email=email, otp=otp)
+            user = StudentUser.objects.get(uni_email=email)
+            
+            # For password reset, allow already verified users
+            if user.is_email_verified:
+                if user.otp == otp:
+                    if is_otp_expired(user):
+                        expire_otp(user)
+                        return Response(
+                            {"error": "OTP expired. Please request a new OTP."},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+                    user.otp = None
+                    user.otp_expiration = None
+                    user.save()
+                    return Response(
+                        {"message": "OTP verified successfully."},
+                        status=status.HTTP_200_OK,
+                    )
+                return Response(
+                    {"error": "Invalid OTP."}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            # For new user registration
+            if user.otp != otp:
+                return Response(
+                    {"error": "Invalid OTP."}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
             if is_otp_expired(user):
                 expire_otp(user)
                 return Response(
@@ -79,7 +115,6 @@ class VerifyEmailView(APIView):
                 )
             
             # If this is a temporary user (not active), don't mark as verified yet
-            # The full registration process will handle that
             if user.is_active:
                 user.is_email_verified = True
                 user.otp = None
@@ -97,6 +132,8 @@ class VerifyEmailView(APIView):
             )
 
 
+
+
 def set_cookie(response, key, value, expires_in):
     response.set_cookie(
         key=key,
@@ -109,9 +146,9 @@ def set_cookie(response, key, value, expires_in):
 
 
 class TokenView(APIView):
-    authentication_classes = []  # Disable authentication
-    permission_classes = [AllowAny]  # Allow unauthenticated access
-
+    authentication_classes = []  
+    permission_classes = [AllowAny]  
+    
     def post(self, request):
         uni_email = request.data.get("uni_email")
         password = request.data.get("password")
@@ -203,7 +240,8 @@ class RefreshTokenView(APIView):
 
 
 class RequestOTPView(APIView):
-    permission_classes = [AllowAny]
+    authentication_classes = []  # Explicitly disable authentication
+    permission_classes = [AllowAny]  # Allow unauthenticated access
 
     def post(self, request):
         uni_email = request.data.get("uni_email")
@@ -258,6 +296,7 @@ class RequestOTPView(APIView):
 
 
 class ResetPasswordView(APIView):
+    authentication_classes = [] 
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -292,3 +331,84 @@ class ResetPasswordView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
+
+
+class RequestPasswordResetOTPView(APIView):
+    authentication_classes = []  # Explicitly disable authentication
+    permission_classes = [AllowAny]  # Allow unauthenticated access
+
+    def post(self, request):
+        uni_email = request.data.get("uni_email")
+        if not uni_email:
+            return Response(
+                {"error": "Email is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = StudentUser.objects.get(uni_email=uni_email)
+            if not user.is_active:
+                return Response(
+                    {"error": "Account not activated. Please complete registration first."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            generate_otp_send_email(user)
+            return Response(
+                {"message": "Password reset OTP sent to your email."},
+                status=status.HTTP_200_OK
+            )
+
+        except StudentUser.DoesNotExist:
+            return Response(
+                {"error": "No account found with this email."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            print(f"Error sending password reset OTP: {e}")
+            return Response(
+                {"error": "An error occurred while sending the OTP."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# In backend/accounts/views.py
+class VerifyPasswordResetOTPView(APIView):
+    authentication_classes = []  # Explicitly disable authentication
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get("uni_email")
+        otp = request.data.get("otp")
+        
+        try:
+            user = StudentUser.objects.get(uni_email=email)
+            
+            if user.otp != otp:
+                return Response(
+                    {"error": "Invalid OTP."}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            if is_otp_expired(user):
+                expire_otp(user)
+                return Response(
+                    {"error": "OTP expired. Please request a new OTP."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+            # Clear OTP after successful verification
+            user.otp = None
+            user.otp_expiration = None
+            user.save()
+            
+            return Response(
+                {"message": "OTP verified successfully."},
+                status=status.HTTP_200_OK,
+            )
+            
+        except StudentUser.DoesNotExist:
+            return Response(
+                {"error": "Invalid email."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )

@@ -256,6 +256,7 @@ export function RegistrationFlow() {
             email={formData.uni_email}
             onNext={handleOtpVerified}
             onClose={() => setShowOtpModal(false)}
+            verificationEndpoint="verify-email/"
           />
         </div>
       )}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Button } from '../ui/Button'
 import api from '../../services/api'
 
-export function OtpVerification({ onClose, onNext, email }) {
+export function OtpVerification({ onClose, onNext, email, verificationEndpoint = 'verify-email/' }) {
   const [otp, setOtp] = useState(['', '', '', ''])
   const [errors, setErrors] = useState({
     inputs: ['', '', '', ''],
@@ -138,7 +138,10 @@ export function OtpVerification({ onClose, onNext, email }) {
     setErrors({ inputs: ['', '', '', ''], form: '' })
 
     try {
-      const response = await api.post('verify-email/', {
+    console.log(verificationEndpoint)
+    console.log(email)  
+    console.log(otpString)
+      const response = await api.post(verificationEndpoint, {
         uni_email: email,
         otp: otpString,
       })
@@ -285,4 +288,5 @@ OtpVerification.propTypes = {
   onClose: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,
   email: PropTypes.string.isRequired,
+  verificationEndpoint: PropTypes.string,
 }
