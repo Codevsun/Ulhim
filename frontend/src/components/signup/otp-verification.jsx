@@ -180,7 +180,12 @@ export function OtpVerification({ onClose, onNext, email, verificationEndpoint =
     setErrors({ inputs: ['', '', '', ''], form: '' })
 
     try {
-      const response = await api.post('request-otp/', { uni_email: email })
+      // Use the correct endpoint based on the verification type
+      const endpoint = verificationEndpoint.includes('password-reset') 
+        ? 'request-password-reset/' 
+        : 'request-otp/'
+      
+      const response = await api.post(endpoint, { uni_email: email })
       
       if (response.status === 200) {
         setErrors({
@@ -194,7 +199,7 @@ export function OtpVerification({ onClose, onNext, email, verificationEndpoint =
     } catch (error) {
       setErrors({
         inputs: ['', '', '', ''],
-        form: error.response?.data?.message || 'Failed to resend OTP. Please try again.'
+        form: error.response?.data?.error || 'Failed to resend OTP. Please try again.'
       })
     } finally {
       setIsResending(false)
