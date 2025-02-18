@@ -134,21 +134,8 @@ export function SignInForm() {
         }}
       />
 
-      {/* Animated grid overlay */}
-      <div className="absolute inset-0 z-0 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-            transform: `translate(${mousePosition.x * 10}px, ${mousePosition.y * 10}px)`,
-            transition: 'transform 0.2s ease-out',
-          }}
-        />
-      </div>
+
+     
 
       <Sparkles />
 

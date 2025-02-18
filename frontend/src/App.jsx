@@ -5,15 +5,20 @@ import { ForgotPasswordPage } from './pages/ForgotPassword'
 import { NotFound } from './pages/NotFound'
 import { HomePage } from './pages/Home'
 import ProtectedRoutes from './pages/ProtectedRoutes'
+import Landing from './pages/Landing'
+
+
 function App() {
   return (
     <Router>
       <Routes>
+        
         <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signup/*" element={<SignUpPage />} />
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/landing" element={<Landing />} />
         <Route 
           path="/home" 
           element={<ProtectedRoutes>
