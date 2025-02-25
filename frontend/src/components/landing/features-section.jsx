@@ -21,7 +21,7 @@ export default function FeaturesSection() {
     {
       id: 2,
       title: 'Global Network',
-      description: 'Connect with brilliant minds worldwide',
+    description: 'Connect with brilliant minds worldwide',
       image: '/src/assets/3.png',
       icon: (
         <path

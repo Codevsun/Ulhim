@@ -1,33 +1,43 @@
-import { useNavigate } from 'react-router-dom'
-import { Button } from '../components/ui/button'
-import { motion } from 'framer-motion'
-
+import NavBar from '../components/feed/nav-bar'
+import PersonalInfoCard from '../components/feed/personal-info-card'
+import NavigationMenu from '../components/feed/navigation-menu'
+import AdditionalNavigationMenu from '../components/feed/additional-navigation-menu'
+import Filters from '../components/feed/filters'
+import CreatePosts from '../components/feed/create-posts'
+import Dashboard from '../components/feed/dashboard'
+import RightSidebar from '../components/feed/right-sidebar'
 export function HomePage() {
-  const navigate = useNavigate()
-
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="space-y-8 p-8 text-center"
-      >
-        <h1 className="bg-gradient-to-r from-blue-100 to-gray-100 bg-clip-text text-4xl font-bold text-transparent">
-          Welcome Home
-        </h1>
+    <div className="min-h-screen bg-[#050508]">
+      {/* Top Navigation Bar */}
+      <NavBar />
 
-        <p className="text-gray-400">This is your protected home page</p>
+      <div className="flex pt-16">
+        {/* Left Sidebar */}
+        <div className="m-2 w-[280px] space-y-8">
+          {/* Profile Section */}
+          <PersonalInfoCard />
 
-        <Button
-          onClick={() => {
-            localStorage.clear()
-            navigate('/signin')
-          }}
-          className="min-w-[200px]"
-        >
-          Sign Out
-        </Button>
-      </motion.div>
+          {/* Navigation Menu */}
+          <NavigationMenu />
+          {/* Help and Logout Section */}
+          <AdditionalNavigationMenu />
+        </div>
+
+        {/* Main Content */}
+        <div className="m-2 flex-1 rounded-2xl bg-gray-900/20 p-6">
+          <Filters />
+
+          {/* Create Post */}
+          <CreatePosts />
+
+          {/* Feed Post */}
+          <Dashboard />
+        </div>
+
+        {/* Right Sidebar */}
+        <RightSidebar />
+      </div>
     </div>
   )
 }
