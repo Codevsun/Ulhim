@@ -5,7 +5,7 @@ export default function RightSidebar() {
         <h3 className="mb-4 text-lg text-white">In Progress</h3>
         <div className="overflow-hidden rounded-xl border border-white/5 bg-white/5">
           <img
-            src="/path-to-task-automation.png"
+            src="src/assets/autmi.png"
             alt="Task Automation"
             className="h-48 w-full object-cover"
           />

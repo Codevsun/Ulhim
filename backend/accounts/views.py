@@ -6,6 +6,8 @@ from .models import StudentUser
 from .serializers import StudentUserSerializer
 from .utils import generate_otp_send_email, expire_otp, is_otp_expired
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.exceptions import TokenError
 
 
 class RegisterView(APIView):
@@ -201,12 +203,20 @@ class ProfileView(APIView):
         user = request.user
         return Response(
             {
+                "id": user.id,  
                 "uni_email": user.uni_email,
+                "username": user.username,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "skills": user.skills,
                 "interests": user.interests,
                 "profile_image": user.profile_image.url if user.profile_image else None,
+                "stats": {
+                    "followers_count": 0,
+                    "following_count": 0,
+                    "posts_count": 2
+                }
+
             }
         )
 
@@ -216,26 +226,34 @@ class RefreshTokenView(APIView):
 
     def post(self, request):
         try:
-            # Get the refresh token from the request body
-            refresh_token = request.data.get("refresh_token")
+            refresh_token = request.data.get('refresh')
             if not refresh_token:
                 return Response(
                     {"error": "Refresh token is required."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Blacklist the refresh token
-            token = RefreshToken(refresh_token)
-            token.blacklist()  # Add the token to the blacklist
-
-            return Response(
-                {"message": "Successfully logged out."},
-                status=status.HTTP_200_OK,
-            )
-        except Exception as e:
+            refresh = RefreshToken(refresh_token)
+            access = str(refresh.access_token)
+            
+            # If ROTATE_REFRESH_TOKENS is True, generate new refresh token
+            if api_settings.ROTATE_REFRESH_TOKENS:
+                refresh.blacklist()  # Blacklist the old refresh token
+                new_refresh = RefreshToken.for_user(refresh.user)
+                return Response({
+                    "access": access,
+                    "refresh": str(new_refresh)
+                })
+            
+            return Response({
+                "access": access,
+                "refresh": refresh_token
+            })
+            
+        except TokenError as e:
             return Response(
                 {"error": "Invalid or expired refresh token."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
 

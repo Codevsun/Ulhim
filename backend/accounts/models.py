@@ -71,6 +71,7 @@ class StudentUser(AbstractUser):
     )
     otp = models.CharField(max_length=5, blank=True, null=True, verbose_name="OTP")
     otp_expiration = models.DateTimeField(null=True, blank=True, verbose_name="OTP Expiration")
+    
 
     objects = StudentUserManager()
 

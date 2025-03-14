@@ -3,22 +3,31 @@ import PropTypes from 'prop-types'
 import { Button } from '../ui/button'
 
 const defaultInterests = [
-  "Creative Arts", "Intellectual and Academic Pursuits", "Lifestyle and Wellness",
-  "Health and Biohacking", "Technology and Innovation", "Personal Development", 
-  "Pop Culture and Entertainment", "Social and Community Engagement", "Fashion",
+  "Web Development", "Mobile Apps", "AI & Machine Learning", "Data Science",
+  "Cybersecurity", "Cloud Computing", "UI/UX Design", "Game Development",
+  "DevOps", "Blockchain", "IoT", "Open Source", "Technical Writing",
+  "Career Growth", "Mentorship", "Project Management", "Entrepreneurship",
   "Other"
 ]
 
 const interestColors = {
-  "Creative Arts": "bg-pink-900 hover:bg-pink-800",
-  "Intellectual and Academic Pursuits": "bg-purple-900 hover:bg-purple-800",
-  "Lifestyle and Wellness": "bg-green-900 hover:bg-green-800",
-  "Health and Biohacking": "bg-emerald-900 hover:bg-emerald-800",
-  "Technology and Innovation": "bg-blue-900 hover:bg-blue-800",
-  "Personal Development": "bg-indigo-900 hover:bg-indigo-800",
-  "Pop Culture and Entertainment": "bg-yellow-900 hover:bg-yellow-800",
-  "Social and Community Engagement": "bg-orange-900 hover:bg-orange-800",
-  "Fashion": "bg-rose-900 hover:bg-rose-800",
+  "Web Development": "bg-blue-900 hover:bg-blue-800",
+  "Mobile Apps": "bg-indigo-900 hover:bg-indigo-800", 
+  "AI & Machine Learning": "bg-purple-900 hover:bg-purple-800",
+  "Data Science": "bg-violet-900 hover:bg-violet-800",
+  "Cybersecurity": "bg-red-900 hover:bg-red-800",
+  "Cloud Computing": "bg-sky-900 hover:bg-sky-800",
+  "UI/UX Design": "bg-pink-900 hover:bg-pink-800",
+  "Game Development": "bg-emerald-900 hover:bg-emerald-800",
+  "DevOps": "bg-orange-900 hover:bg-orange-800",
+  "Blockchain": "bg-amber-900 hover:bg-amber-800",
+  "IoT": "bg-cyan-900 hover:bg-cyan-800",
+  "Open Source": "bg-green-900 hover:bg-green-800",
+  "Technical Writing": "bg-rose-900 hover:bg-rose-800",
+  "Career Growth": "bg-yellow-900 hover:bg-yellow-800",
+  "Mentorship": "bg-teal-900 hover:bg-teal-800",
+  "Project Management": "bg-fuchsia-900 hover:bg-fuchsia-800",
+  "Entrepreneurship": "bg-lime-900 hover:bg-lime-800",
   "Other": "bg-gray-900 hover:bg-gray-800"
 }
 

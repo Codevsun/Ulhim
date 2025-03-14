@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 export default function Filters() {
-  const [selectedSection, setSelectedSection] = useState('general')
+  const [selectedSection, setSelectedSection] = useState('')
   const [selectedCount, setSelectedCount] = useState(0)
   const [selectedFilters, setSelectedFilters] = useState([])
   const [lastClickTime, setLastClickTime] = useState(0)
@@ -47,7 +47,6 @@ export default function Filters() {
     <>
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-medium text-white">Filters</h2>
           {selectedCount > 0 && (
             <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-sm text-purple-400">
               {selectedCount} selected
