@@ -12,7 +12,6 @@ import Chat from './pages/Chat'
 import Posts from './pages/Posts'
 import Dashboard from './components/feed/dashboard'
 
-// Create a client
 const queryClient = new QueryClient()
 
 function App() {

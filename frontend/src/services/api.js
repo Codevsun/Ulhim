@@ -6,6 +6,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
   },
 })
 
@@ -26,7 +27,7 @@ const processQueue = (error, token = null) => {
 const refreshToken = async () => {
   try {
     const refresh = localStorage.getItem(REFRESH_TOKEN)
-    const response = await api.post('/refresh-token/', { refresh })
+    const response = await api.post('refresh-token/', { refresh })
     const { access, refresh: newRefresh } = response.data
 
     localStorage.setItem(ACCESS_TOKEN, access)
