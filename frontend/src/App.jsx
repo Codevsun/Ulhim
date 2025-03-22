@@ -7,7 +7,6 @@ import { NotFound } from './pages/NotFound'
 import Landing from './pages/Landing'
 import ProtectedRoutes from './pages/ProtectedRoutes'
 import Profile from './pages/Profile'
-import Projects from './pages/Projects'
 import Chat from './pages/Chat'
 import Posts from './pages/Posts'
 import Dashboard from './components/feed/dashboard'
@@ -25,7 +24,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Landing />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/projects" element={<Projects />} />
+
           <Route path="/chat" element={<Chat />} />
           <Route path="/posts" element={<Posts />} />
           <Route

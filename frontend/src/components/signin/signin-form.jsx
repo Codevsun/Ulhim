@@ -55,15 +55,20 @@ export function SignInForm() {
 
     setIsLoading(true)
     try {
+      console.log(formData)
       const response = await api.post('token/', {
         uni_email: formData.email,
         password: formData.password,
       })
-
-      localStorage.setItem(ACCESS_TOKEN, response.data.access)
-      localStorage.setItem(REFRESH_TOKEN, response.data.refresh)
-      api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`
-      navigate('/home')
+      if (response.data.access) {
+        localStorage.setItem(ACCESS_TOKEN, response.data.access)
+        localStorage.setItem(REFRESH_TOKEN, response.data.refresh)
+        
+        api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`
+        navigate('/home')
+      } else {
+        throw new Error('No access token received')
+      }
     } catch (error) {
       setErrors({
         ...errors,
@@ -153,7 +158,10 @@ export function SignInForm() {
 
               <div className="flex items-center justify-between">
                 <label className="flex items-center space-x-2 text-sm text-gray-500">
-                  <input type="checkbox" className="form-checkbox border-white/[0.02] bg-white/[0.02]" />
+                  <input
+                    type="checkbox"
+                    className="form-checkbox border-white/[0.02] bg-white/[0.02]"
+                  />
                   <span>Keep me logged in</span>
                 </label>
                 <Link

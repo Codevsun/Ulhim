@@ -14,6 +14,11 @@ const ProtectedRoutes = ({ children }) => {
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN)
+    if (!refreshToken) {
+      setIsAuthorized(false)
+      return
+    }
+
     try {
       const response = await api.post('refresh-token/', { refresh: refreshToken })
       if (response.status === 200) {
@@ -21,10 +26,10 @@ const ProtectedRoutes = ({ children }) => {
         localStorage.setItem(REFRESH_TOKEN, response.data.refresh)
         setIsAuthorized(true)
       } else {
-        setIsAuthorized(false)
+        throw new Error('Failed to refresh token')
       }
     } catch (error) {
-      console.error(error)
+      console.error('Token refresh failed:', error)
       localStorage.removeItem(ACCESS_TOKEN)
       localStorage.removeItem(REFRESH_TOKEN)
       setIsAuthorized(false)
@@ -37,6 +42,7 @@ const ProtectedRoutes = ({ children }) => {
       setIsAuthorized(false)
       return
     }
+
     const decodedToken = jwtDecode(accessToken)
     if (decodedToken.exp < Date.now() / 1000) {
       await refreshToken()
@@ -46,7 +52,7 @@ const ProtectedRoutes = ({ children }) => {
   }
 
   if (isAuthorized === null) {
-    return <Navigate to="/signin" />
+    return <div>Loading...</div>
   }
 
   return isAuthorized ? children : <Navigate to="/signin" />

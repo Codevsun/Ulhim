@@ -19,20 +19,6 @@ export default function NavigationMenu() {
           </svg>
           Home
         </button>
-          <button
-          className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
-          onClick={() => navigate('/projects')}
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"
-            />
-          </svg>
-          Projects
-        </button>
         <button
           className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
           onClick={() => navigate('/posts')}
@@ -42,10 +28,10 @@ export default function NavigationMenu() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={1.5}
-              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+              d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"
             />
           </svg>
-          Posts
+          Feed
         </button>
         <button
           className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
@@ -61,7 +47,7 @@ export default function NavigationMenu() {
           </svg>
           Chat
         </button>
-        <div className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400 cursor-not-allowed">
+        <div className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400">
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -73,7 +59,7 @@ export default function NavigationMenu() {
           Groups
           <span className="ml-1 text-sm text-gray-500">(Coming Soon)</span>
         </div>
-        <div className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400 cursor-not-allowed">
+        <div className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400">
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"

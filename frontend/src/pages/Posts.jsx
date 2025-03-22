@@ -1,6 +1,8 @@
 import { Home } from './Home'
-import CreatePost from '../components/feed/create-posts'
+import { useState } from 'react'
 import Filter from '../components/feed/filters'
+import FloatingActionButton from '../components/feed/flaoting-action-button'
+
 export default function Posts() {
   const posts = [
     {
@@ -11,7 +13,7 @@ export default function Posts() {
         image: 'https://api.dicebear.com/6.x/avataaars/svg?seed=John',
       },
       content: 'Just launched my new project! Check it out.',
-      tag: 'Project Launch',
+      tag: 'article',
       stats: {
         inspired: 24,
         comments: 12,
@@ -25,20 +27,104 @@ export default function Posts() {
         image: 'https://api.dicebear.com/6.x/avataaars/svg?seed=Jane',
       },
       content: 'Working on some exciting new features today.',
-      tag: 'Development',
+      tag: 'inspiration',
       stats: {
         inspired: 18,
         comments: 8,
       },
     },
   ]
+  const [projects] = useState([
+    {
+      content: {
+        borderColor: 'red',
+        image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97',
+        name: 'AI-Powered Code Assistant',
+        badge: 'In Progress',
+        description:
+          'An intelligent coding assistant that helps developers write better code faster.',
+      },
+      author: {
+        image: 'https://randomuser.me/api/portraits/men/32.jpg',
+        name: 'John Smith',
+        username: '@johnsmith',
+      },
+    },
+    {
+      content: {
+        borderColor: 'yellow',
+        image: 'https://images.unsplash.com/photo-1551434678-e076c223a692',
+        name: 'Project Management Dashboard',
+        badge: 'Planning',
+        description: 'A comprehensive project management tool for agile teams.',
+      },
+      author: {
+        image: 'https://randomuser.me/api/portraits/women/44.jpg',
+        name: 'Sarah Johnson',
+        username: '@sarahj',
+      },
+    },
+    {
+      content: {
+        borderColor: 'red',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f',
+        name: 'E-commerce Platform',
+        badge: 'In Progress',
+        description: 'Modern e-commerce solution with advanced analytics and inventory management.',
+      },
+      author: {
+        image: 'https://randomuser.me/api/portraits/men/22.jpg',
+        name: 'Mike Wilson',
+        username: '@mikew',
+      },
+    },
+  ])
+
+  const projectCards = projects.map((project, i) => (
+    <div
+      key={i}
+      className={`group cursor-pointer overflow-hidden rounded-2xl border-2 ${project.content.borderColor === 'red' ? 'border-red-500/30' : project.content.borderColor === 'yellow' ? 'border-yellow-500/30' : ''} bg-white/5 shadow-lg transition-all duration-300 hover:bg-white/10`}
+    >
+      <div className="relative">
+        <img
+          src={project.content.image}
+          alt={project.content.name}
+          className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+        <div className="absolute bottom-6 left-6 right-6">
+          <div className="flex items-center justify-between">
+            <span
+              className={`rounded-full ${project.content.borderColor === 'red' ? 'bg-red-500/20 text-red-300' : project.content.borderColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-300' : ''} px-4 py-1.5 text-sm font-medium backdrop-blur-sm`}
+            >
+              {project.content.badge}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="p-6">
+        <div className="mb-4 flex items-center gap-4">
+          <img
+            src={project.author.image}
+            alt={project.author.name}
+            className="h-10 w-10 rounded-full ring-2 ring-gray-500/30"
+          />
+          <div>
+            <h4 className="font-medium text-white">{project.author.name}</h4>
+            <span className="text-sm text-gray-400">{project.author.username}</span>
+          </div>
+        </div>
+        <h3 className="mb-2 text-xl font-medium text-white">{project.content.name}</h3>
+        <p className="text-gray-400">{project.content.description}</p>
+      </div>
+    </div>
+  ))
 
   return (
     <Home>
       <div className="space-y-6">
         <Filter />
-        <CreatePost />
-
+        {projectCards}
         <div className="space-y-6">
           {posts.map((post) => (
             <div
@@ -110,6 +196,7 @@ export default function Posts() {
             </div>
           ))}
         </div>
+        <FloatingActionButton />
       </div>
     </Home>
   )

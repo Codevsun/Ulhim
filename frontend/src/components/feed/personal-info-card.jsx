@@ -54,6 +54,7 @@ export default function PersonalInfoCard() {
 
   // Show error state
   if (error) {
+    console.log(error)
     return (
       <div className="mt-4 rounded-2xl bg-red-900/20 p-6 backdrop-blur-sm">
         <p className="text-red-400">Failed to load profile</p>

@@ -15,7 +15,7 @@ export default function Filters() {
       // On double click, select all filters in the current section
       let filtersToAdd = []
       if (section === 'general') {
-        filtersToAdd = ['all', 'popular', 'recent', 'following', 'trending']
+        filtersToAdd = ['all', 'projects', 'recent', 'following', 'trending']
       } else if (section === 'levels') {
         filtersToAdd = ['freshman', 'sophomore', 'junior', 'senior', 'graduate']
       } else if (section === 'major') {
@@ -120,13 +120,13 @@ export default function Filters() {
               </button>
               <button
                 className={`rounded-full px-4 py-1 text-sm transition-colors ${
-                  selectedFilters.includes('popular')
+                  selectedFilters.includes('projects')
                     ? 'bg-green-500/40 text-green-300'
                     : 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
                 }`}
-                onClick={() => handleFilterClick('popular', 'general')}
+                onClick={() => handleFilterClick('projects', 'general')}
               >
-                Popular
+                Projects
               </button>
               <button
                 className={`rounded-full px-4 py-1 text-sm transition-colors ${
