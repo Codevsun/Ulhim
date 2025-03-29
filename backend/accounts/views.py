@@ -2,13 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from .models import StudentUser
 from .serializers import StudentUserSerializer
 from .utils import generate_otp_send_email, expire_otp, is_otp_expired
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError
+from recommendations.services import RecommendationEngine
 
+recommendation_engine = RecommendationEngine()
 
 class RegisterView(APIView):
     authentication_classes = []  # Explicitly disable authentication
@@ -209,7 +212,9 @@ class ProfileView(APIView):
                 "first_name": user.first_name,
                 "last_name": user.last_name,
                 "skills": user.skills,
+                "year_in_college": user.year_in_college,
                 "interests": user.interests,
+                "major": user.major,
                 "profile_image": user.profile_image.url if user.profile_image else None,
                 "stats": {
                     "followers_count": 0,
@@ -222,7 +227,8 @@ class ProfileView(APIView):
 
 
 class RefreshTokenView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
+    authentication_classes = []
 
     def post(self, request):
         try:
@@ -239,11 +245,20 @@ class RefreshTokenView(APIView):
             # If ROTATE_REFRESH_TOKENS is True, generate new refresh token
             if api_settings.ROTATE_REFRESH_TOKENS:
                 refresh.blacklist()  # Blacklist the old refresh token
-                new_refresh = RefreshToken.for_user(refresh.user)
-                return Response({
-                    "access": access,
-                    "refresh": str(new_refresh)
-                })
+                # Get user from token payload instead of refresh.user
+                user_id = refresh.payload.get('user_id')
+                try:
+                    user = StudentUser.objects.get(id=user_id)
+                    new_refresh = RefreshToken.for_user(user)
+                    return Response({
+                        "access": access,
+                        "refresh": str(new_refresh)
+                    })
+                except (ValueError, StudentUser.DoesNotExist):
+                    return Response(
+                        {"error": "Invalid user ID in token."},
+                        status=status.HTTP_401_UNAUTHORIZED
+                    )
             
             return Response({
                 "access": access,
@@ -390,9 +405,9 @@ class RequestPasswordResetOTPView(APIView):
             )
 
 
-# In backend/accounts/views.py
+
 class VerifyPasswordResetOTPView(APIView):
-    authentication_classes = []  # Explicitly disable authentication
+    authentication_classes = [] 
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -430,3 +445,27 @@ class VerifyPasswordResetOTPView(APIView):
                 {"error": "Invalid email."}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_recommendations(request):
+    user = request.user
+    recommended_users = recommendation_engine.get_similar_users(user.id)
+    
+    # Serialize recommended users
+    recommended_data = []
+    for recommended_user in recommended_users:
+        recommended_data.append({
+            'id': recommended_user.id,
+            'first_name': recommended_user.first_name,
+            'last_name': recommended_user.last_name,
+            'major': recommended_user.major,
+            'skills': recommended_user.skills,
+            'interests': recommended_user.interests,
+            'profile_image': recommended_user.profile_image.url if recommended_user.profile_image else None
+        })
+    
+    return Response({
+        'recommendations': recommended_data
+    }, status=status.HTTP_200_OK)

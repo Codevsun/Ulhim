@@ -1,45 +1,61 @@
 from django.db import models
 from accounts.models import StudentUser
-
+import uuid
+from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
 
 class BaseModel(models.Model):
-    LEVEL_CHOICES = [
-        ('freshman', 'Freshman'),
-        ('sophomore', 'Sophomore'),
-        ('junior', 'Junior'),
-        ('senior', 'Senior'),
-        ('graduate', 'Graduate'),
-    ]
-
     MAJOR_CHOICES = [
         ('cs', 'Computer Science'),
         ('ai', 'Artificial Intelligence'),
         ('cys', 'Cybersecurity'),
         ('cis', 'Computer Information Systems'),
     ]
+    
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.ForeignKey(
         StudentUser, 
-        on_delete=models.CASCADE, 
-        related_name='posts',
-        verbose_name="Author"
+        on_delete=models.CASCADE,
+        related_name='%(class)ss'  # Dynamic related_name
     )
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    image = models.ImageField(upload_to='post_images/', blank=True, null=True, verbose_name="Image")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    major = models.CharField(max_length=20, choices=MAJOR_CHOICES, default='cs')
     
-    # Filter fields
-    level = models.CharField(max_length=20, choices=LEVEL_CHOICES)
-    major = models.CharField(max_length=20, choices=MAJOR_CHOICES)
-    
-    # Stats
-    inspired_count = models.IntegerField(default=0)
-    
-    # Additional fields for filtering
-    is_trending = models.BooleanField(default=False)
-    is_popular = models.BooleanField(default=False)
+    class Meta:
+        abstract = True
+        ordering = ['-created_at']
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(f"{self.author.username}-{uuid.uuid4().hex[:8]}")
+        super().save(*args, **kwargs)
+
+class Post(BaseModel):
+    TAG_CHOICES = [
+        ('article', 'Article'),
+        ('achievement', 'Achievement'),
+        ('certificate', 'Certificate'),
+        ('inspiration', 'Inspiration'),
+        ('collaboration', 'Collaboration'),
+        ('idea', 'Idea'),
+    ]
+
+    content = models.TextField(max_length=255)
+    tag = models.CharField(max_length=20, choices=TAG_CHOICES)
+    image = models.ImageField(
+        upload_to='posts/%Y/%m/%d/',
+        null=True,
+        blank=True,
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png'])]
+    )
+    level = models.PositiveIntegerField(default=1,     validators=[MinValueValidator(1), MaxValueValidator(5)]
+)
+    inspired_count = models.PositiveIntegerField(default=0)
+    is_trending = models.BooleanField(default=False)
+    
     @property
     def like_count(self):
         return self.likes.count()
@@ -48,79 +64,50 @@ class BaseModel(models.Model):
     def comment_count(self):
         return self.comments.count()
 
-    class Meta:
-        abstract = True
+    def clean(self):
+        if len(self.content) > 255:
+            raise ValidationError("Post content cannot exceed 255 characters")
 
-
-class Post(BaseModel):
-    TAG_CHOICES = [
-        ('article', 'Article'),
-        ('achievement', 'Achievement'),
-        ('question', 'Question'),
-        ('project', 'Project'),
+class Project(BaseModel):
+    STATUS_CHOICES = [
+        ('planning', 'Planning'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
     ]
 
-    content = models.TextField()
-
-    tag = models.CharField(max_length=20, choices=TAG_CHOICES, null=True, blank=True)
-    comments_count = models.IntegerField(default=0)
-
-    class Meta:
-        ordering = ['-created_at']
-
-    def __str__(self):
-        return f"{self.author.username}'s post - {self.created_at.strftime('%Y-%m-%d')}"
-    
-
-class PostLike(models.Model):
-    user = models.ForeignKey(StudentUser, on_delete=models.CASCADE, verbose_name="User")
-    post = models.ForeignKey(
-        Post, 
-        on_delete=models.CASCADE, 
-        verbose_name="Post",
-        related_name='likes'
+    name = models.CharField(max_length=255)
+    description = models.TextField(max_length=255)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='planning')
+    tags = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(
+        upload_to='projects/%Y/%m/%d/',
+        validators=[FileExtensionValidator(['jpg', 'jpeg', 'png'])]
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+    collaborators = models.ManyToManyField(
+        StudentUser,
+        related_name='collaborated_projects',
+        blank=True
+    )
+    level = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+
+    def clean(self):
+        if len(self.description) > 255:
+            raise ValidationError("Description cannot exceed 255 characters")
+
+class Like(models.Model):
+    user = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'post')
-        verbose_name = "Post Like"
-        verbose_name_plural = "Post Likes"
-
-    def __str__(self):
-        return f"{self.user} likes {self.post}"
 
 class Comment(models.Model):
-    author = models.ForeignKey(
-        StudentUser, 
-        on_delete=models.CASCADE,
-        related_name='comments',
-        verbose_name="Author"
-    )
-    post = models.ForeignKey(
-        Post, 
-        on_delete=models.CASCADE, 
-        related_name='comments',
-        verbose_name="Post"
-    )
-    content = models.TextField(verbose_name="Content")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="Updated At")
+    author = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['created_at']
-        verbose_name = "Comment"
-        verbose_name_plural = "Comments"
-
-    def __str__(self):
-        return f"Comment by {self.author} on {self.post}"
-
-class Project(BaseModel):
-    name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='projects/')
-    description = models.TextField()
-    badge = models.CharField(max_length=255)
-    rating = models.FloatField()
-    
-    def __str__(self):
-        return f"{self.name} - {self.created_at.strftime('%Y-%m-%d')}"

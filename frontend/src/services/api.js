@@ -1,63 +1,78 @@
 import axios from 'axios'
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants'
+import { logout } from './auth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10 second timeout
 })
 
-// Add a request interceptor to include the access token in headers
+// Request interceptor for auth token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem(ACCESS_TOKEN)
-    if (token) {
+    if (token && !config.headers['Authorization']) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
-// Add a response interceptor to handle token refresh
+// Response interceptor for token refresh
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
 
-    // Check if the error is due to an expired token
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true
-
-      try {
-        // Attempt to refresh the token
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN)
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/refresh-token/`,
-          {
-            refresh: refreshToken,
-          }
-        )
-
-        // Update the access token in local storage
-        localStorage.setItem(ACCESS_TOKEN, response.data.access)
-
-        // Retry the original request with the new token
-        originalRequest.headers['Authorization'] = `Bearer ${response.data.access}`
-        return api(originalRequest)
-      } catch (refreshError) {
-        // If token refresh fails, clear tokens and redirect to sign-in
-        localStorage.removeItem(ACCESS_TOKEN)
-        localStorage.removeItem(REFRESH_TOKEN)
-        window.location.href = '/signin'
-        return Promise.reject(refreshError)
-      }
+    // Skip if already retried or not 401
+    if (error.response?.status !== 401 || originalRequest.__isRetryRequest) {
+      return Promise.reject(error)
     }
 
-    return Promise.reject(error)
+    originalRequest.__isRetryRequest = true
+
+    try {
+      const refreshToken = localStorage.getItem(REFRESH_TOKEN)
+
+      // Validate refresh token exists
+      if (!refreshToken) {
+        throw new Error('No refresh token available')
+      }
+
+      // Make refresh request (without using the api instance to avoid loops)
+      const { data } = await axios({
+        method: 'post',
+        url: 'refresh-token/',
+        baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000',
+        data: { refresh: refreshToken },
+        skipAuthRefresh: true, // Custom property
+      })
+
+      // Validate response structure
+      if (!data?.access) {
+        throw new Error('Invalid token response')
+      }
+
+      // Store new tokens
+      localStorage.setItem(ACCESS_TOKEN, data.access)
+      if (data.refresh) {
+        localStorage.setItem(REFRESH_TOKEN, data.refresh)
+      }
+
+      // Retry original request
+      originalRequest.headers.Authorization = `Bearer ${data.access}`
+      return api(originalRequest)
+    } catch (refreshError) {
+      // Clean up and redirect
+      logout()
+      window.location.href = '/signin'
+      return Promise.reject(refreshError)
+    }
   }
 )
 

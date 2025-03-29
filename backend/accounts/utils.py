@@ -32,3 +32,5 @@ def expire_otp(user):
 
 def is_otp_expired(user):
     return user.otp_expiration < timezone.now()
+
+

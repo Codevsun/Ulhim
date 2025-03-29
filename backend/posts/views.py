@@ -1,77 +1,104 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework import viewsets, status
 from rest_framework.response import Response
-from django.db.models import Q
-from .models import Post, Project
-from .serializers import PostSerializer, ProjectSerializer
-from django.utils import timezone
-from datetime import timedelta
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from django.shortcuts import get_object_or_404
+from .models import Post, Project, Comment, Like
+from .serializers import (
+    PostSerializer, 
+    ProjectSerializer,
+    CommentSerializer,
+    LikeSerializer
+)
+from accounts.models import StudentUser
 
-# Create your views here.
-
-class BaseViewSet(viewsets.ModelViewSet):
-    def apply_filters(self, queryset, filters):
-        filter_conditions = Q()
-        
-        # General filters
-        if 'popular' in filters:
-            filter_conditions |= Q(is_popular=True)
-        if 'trending' in filters:
-            filter_conditions |= Q(is_trending=True)
-        if 'recent' in filters:
-            filter_conditions |= Q(created_at__gte=timezone.now() - timedelta(days=7))
-        if 'following' in filters:
-            following_users = self.request.user.following.all()
-            filter_conditions |= Q(author__in=following_users)
-            
-        # Level filters
-        level_filters = [f for f in filters if f in dict(Post.LEVEL_CHOICES)]
-        if level_filters:
-            filter_conditions |= Q(level__in=level_filters)
-            
-        # Major filters
-        major_filters = [f for f in filters if f in dict(Post.MAJOR_CHOICES)]
-        if major_filters:
-            filter_conditions |= Q(major__in=major_filters)
-            
-        if filter_conditions:
-            queryset = queryset.filter(filter_conditions)
-            
-        return queryset.distinct()
-
-class PostViewSet(BaseViewSet):
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.select_related('author').prefetch_related('likes', 'comments')
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        queryset = Post.objects.all()
-        filters = self.request.query_params.getlist('filters[]', [])
-        return self.apply_filters(queryset, filters)
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(
+            author=user,
+            level=user.year_in_college,
+            major=user.major
+        )
 
-    @action(detail=False, methods=['get'])
-    def filter_options(self, request):
-        return Response({
-            'general': ['all', 'popular', 'recent', 'following', 'trending'],
-            'levels': [choice[0] for choice in Post.LEVEL_CHOICES],
-            'major': [choice[0] for choice in Post.MAJOR_CHOICES]
-        })
+    @action(detail=True, methods=['post'])
+    def like(self, request, pk=None):
+        post = self.get_object()
+        user = request.user
+        
+        like, created = Like.objects.get_or_create(
+            user=user,
+            post=post
+        )
+        
+        if not created:
+            like.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+            
+        return Response(LikeSerializer(like).data, status=status.HTTP_201_CREATED)
 
-class ProjectViewSet(BaseViewSet):
+    @action(detail=True, methods=['get'])
+    def comments(self, request, pk=None):
+        post = self.get_object()
+        comments = post.comments.select_related('author')
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.select_related('author').prefetch_related('collaborators')
     serializer_class = ProjectSerializer
-    queryset = Project.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(
+            author=user,
+            level=user.year_in_college,
+            major=user.major
+        )
+
+    @action(detail=True, methods=['post'])
+    def add_collaborator(self, request, pk=None):
+        project = self.get_object()
+        collaborator_id = request.data.get('user_id')
+        
+        try:
+            collaborator = StudentUser.objects.get(id=collaborator_id)
+            project.collaborators.add(collaborator)
+            return Response(status=status.HTTP_200_OK)
+        except StudentUser.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+class CommentViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Project.objects.all()
-        filters = self.request.query_params.getlist('filters[]', [])
-        return self.apply_filters(queryset, filters)
+        if 'post_pk' in self.kwargs:
+            return Comment.objects.filter(post_id=self.kwargs['post_pk'])
+        return Comment.objects.all()
 
-    @action(detail=False, methods=['get'])
-    def filter_options(self, request):
-        return Response({
-            'general': ['all', 'popular', 'recent', 'following', 'trending'],
-            'levels': [choice[0] for choice in Project.LEVEL_CHOICES],
-            'major': [choice[0] for choice in Project.MAJOR_CHOICES]
-        })
+    def perform_create(self, serializer):
+        if 'post_pk' in self.kwargs:
+            post = get_object_or_404(Post, pk=self.kwargs['post_pk'])
+            serializer.save(
+                author=self.request.user,
+                post=post
+            )
+        else:
+            serializer.save(author=self.request.user)
 
+class LikeViewSet(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

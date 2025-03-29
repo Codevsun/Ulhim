@@ -24,7 +24,6 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Landing />} />
           <Route path="/profile" element={<Profile />} />
-
           <Route path="/chat" element={<Chat />} />
           <Route path="/posts" element={<Posts />} />
           <Route
