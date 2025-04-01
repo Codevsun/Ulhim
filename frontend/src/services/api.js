@@ -76,4 +76,6 @@ api.interceptors.response.use(
   }
 )
 
+export const mediaUrl = import.meta.env.VITE_MEDIA_URL
+
 export default api

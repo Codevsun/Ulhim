@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import api from '../../services/api'
+import api, { mediaUrl } from '../../services/api'
 
 // Default profile state
 const defaultProfile = {
@@ -31,6 +31,11 @@ export default function PersonalInfoCard() {
     retry: 2, // Retry failed requests twice
     refetchOnWindowFocus: false, // Don't refetch when window regains focus
   })
+
+  // Generate profile image URL
+  const profileImageUrl = profile.profile_image
+    ? `${mediaUrl}${profile.profile_image}`
+    : 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'
 
   // Show loading state
   if (isLoading) {
@@ -67,7 +72,7 @@ export default function PersonalInfoCard() {
       <div className="mt-4 transform rounded-2xl bg-gray-900/20 p-6 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:bg-gray-800/30 hover:shadow-[0_0_30px_rgba(255,255,255,0.1)]">
         <div className="flex items-center gap-3">
           <img
-            src={profile.profile_image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=default'}
+            src={profileImageUrl}
             alt="Profile"
             className="h-12 w-12 rounded-full transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] group-hover:ring-2 group-hover:ring-white/50"
           />

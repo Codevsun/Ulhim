@@ -10,6 +10,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.exceptions import TokenError
 from recommendations.services import RecommendationEngine
+import os
+
 
 recommendation_engine = RecommendationEngine()
 
@@ -227,49 +229,45 @@ class ProfileView(APIView):
 
 
 class RefreshTokenView(APIView):
-    permission_classes = []
+    permission_classes = [AllowAny]
     authentication_classes = []
 
     def post(self, request):
-        try:
-            refresh_token = request.data.get('refresh')
-            if not refresh_token:
-                return Response(
-                    {"error": "Refresh token is required."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response(
+                {"error": "Refresh token is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
+        try:
+            # Validate the refresh token
             refresh = RefreshToken(refresh_token)
-            access = str(refresh.access_token)
-            
-            # If ROTATE_REFRESH_TOKENS is True, generate new refresh token
+
             if api_settings.ROTATE_REFRESH_TOKENS:
-                refresh.blacklist()  # Blacklist the old refresh token
-                # Get user from token payload instead of refresh.user
-                user_id = refresh.payload.get('user_id')
-                try:
-                    user = StudentUser.objects.get(id=user_id)
-                    new_refresh = RefreshToken.for_user(user)
-                    return Response({
-                        "access": access,
-                        "refresh": str(new_refresh)
-                    })
-                except (ValueError, StudentUser.DoesNotExist):
-                    return Response(
-                        {"error": "Invalid user ID in token."},
-                        status=status.HTTP_401_UNAUTHORIZED
-                    )
-            
-            return Response({
-                "access": access,
-                "refresh": refresh_token
-            })
-            
+                # Blacklist the old token and create a new one
+                refresh.blacklist()
+                new_refresh = RefreshToken.for_user(refresh.user)
+                new_access = str(new_refresh.access_token)  # Use new_refresh for access token
+                
+                return Response({
+                    "access": str(new_access),
+                    "refresh": str(new_refresh)
+                })
+            else:
+                # Use the existing refresh token
+                access = str(refresh.access_token)
+                return Response({
+                    "access": access,
+                    "refresh": refresh_token
+                })
+
         except TokenError as e:
             return Response(
                 {"error": "Invalid or expired refresh token."},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
+
 
 
 class RequestOTPView(APIView):
@@ -469,3 +467,46 @@ def get_recommendations(request):
     return Response({
         'recommendations': recommended_data
     }, status=status.HTTP_200_OK)
+
+class UpdateProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        image = request.FILES.get('profile_image')
+        
+        if not image:
+            return Response(
+                {"error": "No profile image provided."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # Optional: validate file type and size
+        if not image.content_type.startswith('image/'):
+            return Response(
+                {"error": "File must be an image."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        if image.size > 5 * 1024 * 1024:  # 5MB limit
+            return Response(
+                {"error": "Image size should not exceed 5MB."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        # Delete old image if it exists
+        if user.profile_image:
+            if os.path.isfile(user.profile_image.path):
+                os.remove(user.profile_image.path)
+        
+        # Save new image
+        user.profile_image = image
+        user.save()
+        
+        return Response(
+            {
+                "message": "Profile image updated successfully.",
+                "image_url": user.profile_image.url
+            },
+            status=status.HTTP_200_OK
+        )

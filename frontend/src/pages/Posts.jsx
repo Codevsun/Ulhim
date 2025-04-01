@@ -38,9 +38,6 @@ export default function Posts() {
 
         const projectsData = await projectsResponse.json()
 
-        console.log('Posts data:', postsData)
-        console.log('Projects data:', projectsData)
-
         // Transform posts data
         const transformedPosts = postsData.map((post) => ({
           id: post.id,
@@ -50,7 +47,7 @@ export default function Posts() {
             name: `${post.author.first_name} ${post.author.last_name}`,
             username: `@${post.author.username}`,
             image:
-              post.author.profile_picture ||
+              post.author.profile_image ||
               'https://api.dicebear.com/6.x/avataaars/svg?seed=' + post.author.username,
           },
           content: post.content,
@@ -81,7 +78,8 @@ export default function Posts() {
           },
           author: {
             image:
-              project.author.profile_picture || 'https://randomuser.me/api/portraits/men/32.jpg',
+              project.author.profile_image ||
+              'https://api.dicebear.com/6.x/avataaars/svg?seed=' + project.author.username,
             name: `${project.author.first_name} ${project.author.last_name}`,
             username: `@${project.author.username}`,
           },

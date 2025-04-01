@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { useQuery } from '@tanstack/react-query'
 import api from '../services/api'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -10,13 +10,15 @@ export default function Profile() {
   const [description, setDescription] = useState('Tell others about yourself...')
   const [editingFeatured, setEditingFeatured] = useState(false)
   const [editingInProgress, setEditingInProgress] = useState(false)
+  const [profileImage, setProfileImage] = useState(null)
+  const fileInputRef = useRef(null)
 
   const {
     data: profile = {
       first_name: '',
       last_name: '',
       username: '',
-      profile_image: null,
+      profile_image: 'http://localhost:8000/media/profile_images/CS_F_9.PNG',
       major: '',
       year_in_college: '',
       stats: {
@@ -31,6 +33,7 @@ export default function Profile() {
     queryKey: ['profile'],
     queryFn: async () => {
       const response = await api.get('profile/')
+      console.log(response.data)
       return response.data
     },
   })
@@ -48,6 +51,59 @@ export default function Profile() {
   const handleInProgressSave = () => {
     // TODO: Add API call to save in progress projects
     setEditingInProgress(false)
+  }
+
+  const handleProfileImageClick = () => {
+    fileInputRef.current.click()
+  }
+
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+  const [uploadError, setUploadError] = useState(null)
+
+  const uploadProfileImage = async (file) => {
+    setIsUploadingImage(true)
+    setUploadError(null)
+
+    try {
+      const formData = new FormData()
+      formData.append('profile_image', file)
+
+      const response = await api.post('update-profile/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      return response.data
+    } catch (error) {
+      console.error('Error uploading profile image:', error)
+      setUploadError(error.response?.data?.message || 'Failed to upload image')
+      throw error
+    } finally {
+      setIsUploadingImage(false)
+    }
+  }
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      // Show preview immediately
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setProfileImage(reader.result)
+      }
+      reader.readAsDataURL(file)
+
+      // Upload the file to the server
+      uploadProfileImage(file)
+        .then(() => {
+          // Success notification could be added here
+          console.log('Profile image updated successfully')
+        })
+        .catch(() => {
+          // Error is already handled in uploadProfileImage
+        })
+    }
   }
 
   return (
@@ -110,14 +166,54 @@ export default function Profile() {
               {/* Profile Card */}
               <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-8 backdrop-blur-sm">
                 <div className="flex flex-col items-center text-center">
-                  <img
-                    src={
-                      profile.profile_image ||
-                      'https://api.dicebear.com/7.x/avataaars/svg?seed=default'
-                    }
-                    alt="Profile"
-                    className="mb-6 h-40 w-40 rounded-full transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
-                  />
+                  <div className="group relative mb-6">
+                    <img
+                      src={
+                        profileImage ||
+                        profile.profile_image ||
+                        'https://api.dicebear.com/7.x/avataaars/svg?seed=default'
+                      }
+                      alt="Profile"
+                      className="h-40 w-40 cursor-pointer rounded-full object-cover transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
+                      onClick={handleProfileImageClick}
+                    />
+                    <div
+                      className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
+                      onClick={handleProfileImageClick}
+                    >
+                      {isUploadingImage ? (
+                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                      ) : (
+                        <svg
+                          className="h-8 w-8 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleProfileImageChange}
+                    />
+                    {uploadError && <p className="mt-2 text-sm text-red-400">{uploadError}</p>}
+                  </div>
                   <h3 className="text-2xl font-medium text-white">
                     {profile.first_name} {profile.last_name}
                   </h3>
@@ -193,7 +289,7 @@ export default function Profile() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={1.5}
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 30l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       />
                     </svg>
                     Chat
