@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { useQuery } from '@tanstack/react-query'
-import api from '../services/api'
+import api, { mediaUrl } from '../services/api'
 import { useState, useRef } from 'react'
 
 export default function Profile() {
@@ -18,7 +18,7 @@ export default function Profile() {
       first_name: '',
       last_name: '',
       username: '',
-      profile_image: 'http://localhost:8000/media/profile_images/CS_F_9.PNG',
+      profile_image: 'profile_images/CS_F_9.PNG',
       major: '',
       year_in_college: '',
       stats: {
@@ -170,8 +170,9 @@ export default function Profile() {
                     <img
                       src={
                         profileImage ||
-                        profile.profile_image ||
-                        'https://api.dicebear.com/7.x/avataaars/svg?seed=default'
+                        (profile.profile_image
+                          ? `${mediaUrl}${profile.profile_image}`
+                          : 'https://api.dicebear.com/7.x/avataaars/svg?seed=default')
                       }
                       alt="Profile"
                       className="h-40 w-40 cursor-pointer rounded-full object-cover transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"

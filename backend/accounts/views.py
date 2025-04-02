@@ -248,7 +248,7 @@ class RefreshTokenView(APIView):
             
             # Get user and create new tokens
             user_id = refresh.payload.get('user_id')
-            user = StudentUser.objects.get(id=user_id)
+            user = StudentUser.objects.get(uni_email=user_id)
             new_refresh = RefreshToken.for_user(user)
             
             return Response({
@@ -503,3 +503,40 @@ class UpdateProfileView(APIView):
             },
             status=status.HTTP_200_OK
         )
+    
+
+class SearchUsersView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        from django.db.models import Q
+        
+        query = request.query_params.get('query')
+        if not query:
+            return Response(
+                {"error": "Query parameter is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Search for users by username, first name, last name, or major
+        users = StudentUser.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(major__icontains=query)
+        )[:10]  # Limit to 10 results for performance
+        
+        # Format the response data
+        results = []
+        for user in users:
+            results.append({
+                'id': user.id,
+                'username': user.username,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'major': user.major,
+                'profile_image': user.profile_image.url if user.profile_image else None,
+                'year_in_college': user.year_in_college
+            })
+        
+        return Response(results)

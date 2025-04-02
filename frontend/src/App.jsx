@@ -34,6 +34,7 @@ function App() {
               </ProtectedRoutes>
             }
           />
+          
         </Routes>
       </Router>
     </QueryClientProvider>

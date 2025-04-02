@@ -12,6 +12,7 @@ from .views import (
     VerifyPasswordResetOTPView,
     UpdateProfileView,
     get_recommendations,
+    SearchUsersView,
 )
 
 urlpatterns = [
@@ -26,4 +27,5 @@ urlpatterns = [
     path("verify-password-reset-otp/", VerifyPasswordResetOTPView.as_view(), name="verify-password-reset-otp"),
     path("update-profile/", UpdateProfileView.as_view(), name="update-profile"),
     path("recommendations/", get_recommendations, name="recommendations"),
+    path("search-users/", SearchUsersView.as_view(), name="search-users"),
 ]
