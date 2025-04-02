@@ -230,7 +230,6 @@ class ProfileView(APIView):
 
 class RefreshTokenView(APIView):
     permission_classes = [AllowAny]
-    authentication_classes = []
 
     def post(self, request):
         refresh_token = request.data.get('refresh')
@@ -241,33 +240,27 @@ class RefreshTokenView(APIView):
             )
 
         try:
-            # Validate the refresh token
+            # Validate and create new refresh token
             refresh = RefreshToken(refresh_token)
+            
+            # Always rotate tokens for security
+            refresh.blacklist()
+            
+            # Get user and create new tokens
+            user_id = refresh.payload.get('user_id')
+            user = StudentUser.objects.get(id=user_id)
+            new_refresh = RefreshToken.for_user(user)
+            
+            return Response({
+                "access": str(new_refresh.access_token),
+                "refresh": str(new_refresh)
+            })
 
-            if api_settings.ROTATE_REFRESH_TOKENS:
-                # Blacklist the old token and create a new one
-                refresh.blacklist()
-                new_refresh = RefreshToken.for_user(refresh.user)
-                new_access = str(new_refresh.access_token)  # Use new_refresh for access token
-                
-                return Response({
-                    "access": str(new_access),
-                    "refresh": str(new_refresh)
-                })
-            else:
-                # Use the existing refresh token
-                access = str(refresh.access_token)
-                return Response({
-                    "access": access,
-                    "refresh": refresh_token
-                })
-
-        except TokenError as e:
+        except (TokenError, StudentUser.DoesNotExist) as e:
             return Response(
                 {"error": "Invalid or expired refresh token."},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
-
 
 
 class RequestOTPView(APIView):

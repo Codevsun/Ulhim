@@ -127,7 +127,9 @@ DATABASES = {
         'PORT': getenv('PGPORT', 5432),
          'OPTIONS': {
              'sslmode': 'require',
-        }
+        },
+        'DISABLE_SERVER_SIDE_CURSORS': True,  
+
     }
 }
 

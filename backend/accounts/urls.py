@@ -11,6 +11,7 @@ from .views import (
     RequestPasswordResetOTPView,
     VerifyPasswordResetOTPView,
     UpdateProfileView,
+    get_recommendations,
 )
 
 urlpatterns = [
@@ -24,4 +25,5 @@ urlpatterns = [
     path("request-password-reset/", RequestPasswordResetOTPView.as_view(), name="request-password-reset"),
     path("verify-password-reset-otp/", VerifyPasswordResetOTPView.as_view(), name="verify-password-reset-otp"),
     path("update-profile/", UpdateProfileView.as_view(), name="update-profile"),
+    path("recommendations/", get_recommendations, name="recommendations"),
 ]

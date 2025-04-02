@@ -3,8 +3,8 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import BaseUserManager
 
-
 class StudentUserManager(BaseUserManager):
+
     def create_superuser(self, uni_email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
