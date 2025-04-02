@@ -70,11 +70,14 @@ export default function Posts() {
                 ? 'red'
                 : project.status === 'planning'
                   ? 'yellow'
-                  : 'green',
+                  : project.status === 'graduation project'
+                    ? 'purple'
+                    : 'green',
             image: project.image || 'https://images.unsplash.com/photo-1551434678-e076c223a692',
             name: project.name,
             badge: project.status.replace('_', ' '),
             description: project.description,
+            isGraduationProject: project.status === 'graduation project',
           },
           author: {
             image:
@@ -207,7 +210,15 @@ export default function Posts() {
 
   const renderProjectCard = (project) => (
     <div
-      className={`group cursor-pointer overflow-hidden rounded-2xl border-2 ${project.content.borderColor === 'red' ? 'border-red-500/30' : project.content.borderColor === 'yellow' ? 'border-yellow-500/30' : 'border-green-500/30'} bg-white/5 shadow-lg transition-all duration-300 hover:bg-white/10`}
+      className={`group cursor-pointer overflow-hidden rounded-2xl border-2 ${
+        project.content.borderColor === 'red'
+          ? 'border-red-500/30'
+          : project.content.borderColor === 'yellow'
+            ? 'border-yellow-500/30'
+            : project.content.borderColor === 'purple'
+              ? 'border-purple-500/30'
+              : 'border-green-500/30'
+      } bg-white/5 shadow-lg transition-all duration-300 hover:bg-white/10`}
     >
       <div className="relative">
         <img
@@ -219,9 +230,23 @@ export default function Posts() {
         <div className="absolute bottom-6 left-6 right-6">
           <div className="flex items-center justify-between">
             <span
-              className={`rounded-full ${project.content.borderColor === 'red' ? 'bg-red-500/20 text-red-300' : project.content.borderColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-300' : 'bg-green-500/20 text-green-300'} px-4 py-1.5 text-sm font-medium backdrop-blur-sm`}
+              className={`rounded-full capitalize ${
+                project.content.borderColor === 'red'
+                  ? 'bg-red-500/20 text-red-300'
+                  : project.content.borderColor === 'yellow'
+                    ? 'bg-yellow-500/20 text-yellow-300'
+                    : project.content.borderColor === 'purple'
+                      ? 'bg-purple-500/20 text-purple-300'
+                      : 'bg-green-500/20 text-green-300'
+              } px-4 py-1.5 text-sm font-medium backdrop-blur-sm`}
             >
-              {project.content.badge}
+              {project.content.isGraduationProject ? (
+                <span className="flex items-center gap-1">
+                  <span>🎓</span> {project.content.badge}
+                </span>
+              ) : (
+                project.content.badge
+              )}
             </span>
           </div>
         </div>
@@ -239,7 +264,15 @@ export default function Posts() {
           </div>
           <span className="ml-auto text-xs text-gray-400">{formatDate(project.createdAt)}</span>
         </div>
-        <h3 className="mb-2 text-xl font-medium text-white">{project.content.name}</h3>
+        <h3 className="mb-2 text-xl font-medium text-white">
+          {project.content.isGraduationProject ? (
+            <span className="flex items-center gap-2">
+              {project.content.name} <span className="text-purple-300">🎓</span>
+            </span>
+          ) : (
+            project.content.name
+          )}
+        </h3>
         <p className="text-gray-400">{project.content.description}</p>
       </div>
     </div>

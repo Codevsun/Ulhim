@@ -177,6 +177,7 @@ export default function CreateProjects({
                 <option value="planning">Planning</option>
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
+                <option value="graduation project">Graduation Project</option>  
               </select>
             </div>
 

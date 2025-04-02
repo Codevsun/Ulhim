@@ -51,8 +51,10 @@ class Post(BaseModel):
         blank=True,
         validators=[FileExtensionValidator(['jpg', 'jpeg', 'png'])]
     )
-    level = models.PositiveIntegerField(default=1,     validators=[MinValueValidator(1), MaxValueValidator(5)]
-)
+    level = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
     inspired_count = models.PositiveIntegerField(default=0)
     is_trending = models.BooleanField(default=False)
     
@@ -73,6 +75,7 @@ class Project(BaseModel):
         ('planning', 'Planning'),
         ('in_progress', 'In Progress'),
         ('completed', 'Completed'),
+        ('graduation project', 'Graduation Project'),
     ]
 
     name = models.CharField(max_length=255)
