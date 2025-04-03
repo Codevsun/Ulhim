@@ -39,6 +39,10 @@ export default function Profile() {
   })
 
   const handleDescriptionSave = () => {
+    if (description.length > 255) {
+      alert('Description must be 255 characters or less')
+      return
+    }
     // TODO: Add API call to save description
     setIsEditing(false)
   }
@@ -164,7 +168,7 @@ export default function Profile() {
           <div className="relative col-span-3">
             <div className="sticky top-24 w-full space-y-8">
               {/* Profile Card */}
-              <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-8 backdrop-blur-sm">
+              <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-8 shadow-lg backdrop-blur-sm">
                 <div className="flex flex-col items-center text-center">
                   <div className="group relative mb-6">
                     <img
@@ -219,7 +223,7 @@ export default function Profile() {
                     {profile.first_name} {profile.last_name}
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">@{profile.username}</p>
-                  <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-purple-400/10 px-3 py-1">
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-purple-400/20 px-3 py-1">
                     <span className="text-sm font-medium text-purple-400">{profile.major}</span>
                     <span className="h-1 w-1 rounded-full bg-purple-400/50"></span>
                     <span className="text-sm text-purple-300/80">
@@ -251,7 +255,7 @@ export default function Profile() {
               </div>
 
               {/* Navigation Menu */}
-              <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-6">
+              <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
                 <div className="space-y-2">
                   <button
                     onClick={() => navigate('/home')}
@@ -325,7 +329,7 @@ export default function Profile() {
                 About Me
                 <div className="mt-2 h-px w-24 bg-gradient-to-r from-white/30 to-transparent"></div>
               </h2>
-              <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-6">
+              <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="text-lg font-medium text-white">Who Am I</h3>
                   {isEditing ? (
@@ -345,12 +349,26 @@ export default function Profile() {
                   )}
                 </div>
                 {isEditing ? (
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="h-32 w-full resize-none rounded-lg border border-white/10 bg-gray-800/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
-                    placeholder="Tell others about yourself..."
-                  />
+                  <div className="relative">
+                    <textarea
+                      value={description}
+                      onChange={(e) => {
+                        if (e.target.value.length <= 255) {
+                          setDescription(e.target.value)
+                        }
+                      }}
+                      maxLength={255}
+                      className="h-32 w-full resize-none rounded-lg border border-white/10 bg-gray-700/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
+                      placeholder="Tell others about yourself..."
+                    />
+                    <div
+                      className={`absolute bottom-2 right-2 text-sm ${
+                        description.length >= 230 ? 'text-red-400' : 'text-gray-400'
+                      }`}
+                    >
+                      {description.length}/255
+                    </div>
+                  </div>
                 ) : (
                   <p className="text-gray-300">{description}</p>
                 )}
@@ -365,7 +383,7 @@ export default function Profile() {
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 {/* Featured Projects */}
-                <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-6">
+                <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-lg font-medium text-white">Featured</h3>
                     {editingFeatured ? (
@@ -389,11 +407,11 @@ export default function Profile() {
                       <input
                         type="text"
                         placeholder="Project name"
-                        className="w-full rounded-lg border border-white/10 bg-gray-800/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
+                        className="w-full rounded-lg border border-white/10 bg-gray-700/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
                       />
                       <textarea
                         placeholder="Project description"
-                        className="h-24 w-full resize-none rounded-lg border border-white/10 bg-gray-800/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
+                        className="h-24 w-full resize-none rounded-lg border border-white/10 bg-gray-700/30 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
                       />
                     </div>
                   ) : (
@@ -404,7 +422,7 @@ export default function Profile() {
                 </div>
 
                 {/* In Progress Projects */}
-                <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-6">
+                <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
                   <div className="mb-4 flex items-center justify-between">
                     <h3 className="text-lg font-medium text-white">In Progress</h3>
                     {editingInProgress ? (
@@ -428,11 +446,11 @@ export default function Profile() {
                       <input
                         type="text"
                         placeholder="Project name"
-                        className="w-full rounded-lg border border-white/10 bg-gray-800/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
+                        className="w-full rounded-lg border border-white/10 bg-gray-700/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
                       />
                       <textarea
                         placeholder="Project description"
-                        className="h-24 w-full resize-none rounded-lg border border-white/10 bg-gray-800/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
+                        className="h-24 w-full resize-none rounded-lg border border-white/10 bg-gray-700/50 p-3 text-white focus:border-purple-400/50 focus:ring-1 focus:ring-purple-400/50"
                       />
                     </div>
                   ) : (
@@ -455,14 +473,14 @@ export default function Profile() {
                   <button
                     key={year}
                     onClick={() => navigate(`/year/${year}`)}
-                    className={`group relative overflow-hidden rounded-lg border border-white/5 bg-white/[0.02] p-6 backdrop-blur-sm transition-all duration-500 hover:border-white/10 hover:bg-white/[0.04] ${
+                    className={`group relative overflow-hidden rounded-lg border border-white/10 bg-gray-800/30 p-6 shadow-lg backdrop-blur-sm transition-all duration-500 hover:border-white/20 hover:bg-gray-700/50 ${
                       year === 1 ? 'col-span-2' : ''
                     }`}
                   >
                     <div className="relative z-10 flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-md border border-white/5 bg-black/30">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-md border border-white/10 bg-gray-800/30 ">
                         <svg
-                          className="h-6 w-6 text-white/40 transition-colors duration-500 group-hover:text-white/80"
+                          className="h-6 w-6 text-purple-400/80 transition-colors duration-500 group-hover:text-purple-300 drop-shadow-[0_0_3px_rgba(168,85,247,0.5)]"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -477,10 +495,10 @@ export default function Profile() {
                       </div>
                       <div className="text-left">
                         <span className="block text-lg font-light text-white">Year {year}</span>
-                        <span className="mt-1 block text-sm text-white/40">View details →</span>
+                        <span className="mt-1 block text-sm text-white/60">View details →</span>
                       </div>
                     </div>
-                    <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+                    <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
                   </button>
                 ))}
               </div>
@@ -490,13 +508,13 @@ export default function Profile() {
           {/* Right Column - Skills & Interests */}
           <div className="col-span-3 space-y-6">
             {/* Skills Section */}
-            <div className="rounded-2xl border border-white/5 bg-gray-900/30 p-6">
+            <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
               <h3 className="mb-4 text-lg font-medium text-white">Skills</h3>
               <div className="flex flex-wrap gap-2">
                 {profile.skills.map((skill, index) => (
                   <span
                     key={index}
-                    className="transform cursor-default rounded-full border border-purple-500/30 bg-gradient-to-r from-purple-500/30 to-pink-500/30 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                    className="transform cursor-default rounded-full border border-purple-500/40 bg-gradient-to-r from-purple-500/40 to-pink-500/40 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
                   >
                     {skill}
                   </span>
@@ -505,13 +523,13 @@ export default function Profile() {
             </div>
 
             {/* Interests Section */}
-            <div className="rounded-2xl border border-white/5 bg-gray-900/20 p-6">
+            <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
               <h3 className="mb-4 text-lg font-medium text-white">Interests</h3>
               <div className="flex flex-wrap gap-2">
                 {profile.interests.map((interest, index) => (
                   <span
                     key={index}
-                    className="transform cursor-default rounded-full border border-blue-500/30 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+                    className="transform cursor-default rounded-full border border-blue-500/40 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
                   >
                     {interest}
                   </span>

@@ -10,7 +10,7 @@ import Profile from './pages/Profile'
 import Chat from './pages/Chat'
 import Posts from './pages/Posts'
 import Dashboard from './components/feed/dashboard'
-
+import Years from './pages/Years'
 const queryClient = new QueryClient()
 
 function App() {
@@ -31,10 +31,10 @@ function App() {
             element={
               <ProtectedRoutes>
                 <Dashboard />
+                <Route path="/year/:yearNumber" element={<Years />} />
               </ProtectedRoutes>
             }
           />
-          
         </Routes>
       </Router>
     </QueryClientProvider>
