@@ -6,11 +6,12 @@ import { ForgotPasswordPage } from './pages/ForgotPassword'
 import { NotFound } from './pages/NotFound'
 import Landing from './pages/Landing'
 import ProtectedRoutes from './pages/ProtectedRoutes'
-import Profile from './pages/Profile'
 import Chat from './pages/Chat'
 import Posts from './pages/Posts'
 import Dashboard from './components/feed/dashboard'
+import DashboardProfile from './components/profile/dashboard-profile'
 import Years from './pages/Years'
+import Suggestions from './pages/suggestions'
 const queryClient = new QueryClient()
 
 function App() {
@@ -23,15 +24,16 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Landing />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<DashboardProfile />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/posts" element={<Posts />} />
+          <Route path="/suggestions" element={<Suggestions />} />
+          <Route path="/year/:yearNumber" element={<Years />} />
           <Route
             path="/home"
             element={
               <ProtectedRoutes>
                 <Dashboard />
-                <Route path="/year/:yearNumber" element={<Years />} />
               </ProtectedRoutes>
             }
           />

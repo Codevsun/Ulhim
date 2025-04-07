@@ -3,7 +3,7 @@ import { Home } from './Home'
 
 export default function Chat() {
   const [messages, setMessages] = useState([
-    { text: "Hello! I'm your AI assistant. How can I help you today?", sender: 'bot' }
+    { text: "Hello! I'm your AI assistant. How can I help you today?", sender: 'bot' },
   ])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -13,18 +13,18 @@ export default function Chat() {
     if (newMessage.trim()) {
       // Add user message
       const userMessage = { text: newMessage, sender: 'user' }
-      setMessages(prev => [...prev, userMessage])
+      setMessages((prev) => [...prev, userMessage])
       setNewMessage('')
       setIsLoading(true)
 
       try {
         // Simulate bot response - replace with actual API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        const botResponse = { 
-          text: "I'm a demo chatbot. In the real implementation, this would be replaced with an actual API response.", 
-          sender: 'bot' 
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        const botResponse = {
+          text: "welcome to the Ulhim's chatbot, you can ask about anything regarding your major, skills, suggestions and more! ",
+          sender: 'bot',
         }
-        setMessages(prev => [...prev, botResponse])
+        setMessages((prev) => [...prev, botResponse])
       } catch (error) {
         console.error('Failed to get bot response:', error)
       } finally {
@@ -35,65 +35,76 @@ export default function Chat() {
 
   return (
     <Home>
-      <div className="flex flex-col h-full max-w-4xl mx-auto bg-black rounded-xl shadow-2xl p-6 border border-purple-900/30">
-        <h1 className="text-3xl font-bold mb-6 text-center text-purple-300">AI Assistant</h1>
-        
-        <div className="flex-1 overflow-y-auto mb-6 space-y-6 pr-4 scrollbar-thin scrollbar-thumb-purple-900 scrollbar-track-black">
+      <div className="mx-auto flex h-full max-w-4xl flex-col rounded-xl border border-purple-900/30 bg-black p-6 shadow-2xl">
+        <h1 className="mb-6 text-center text-3xl font-bold text-purple-300">AI Assistant</h1>
+
+        <div className="scrollbar-thin scrollbar-thumb-purple-900 scrollbar-track-black mb-6 flex-1 space-y-6 overflow-y-auto pr-4">
           {messages.map((message, index) => (
-            <div 
+            <div
               key={index}
               className={`flex items-end space-x-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {message.sender === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
-                  <span className="text-purple-300 text-sm">AI</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-purple-500/30 bg-purple-900/50">
+                  <span className="text-sm text-purple-300">AI</span>
                 </div>
               )}
-              <div className={`max-w-[70%] p-4 rounded-2xl ${
-                message.sender === 'user' 
-                  ? 'bg-purple-900/30 text-purple-100 rounded-br-none border border-purple-500/30' 
-                  : 'bg-black text-purple-100 rounded-bl-none border border-purple-500/30'
-              } shadow-lg`}>
+              <div
+                className={`max-w-[70%] rounded-2xl p-4 ${
+                  message.sender === 'user'
+                    ? 'rounded-br-none border border-purple-500/30 bg-purple-900/30 text-purple-100'
+                    : 'rounded-bl-none border border-purple-500/30 bg-black text-purple-100'
+                } shadow-lg`}
+              >
                 {message.text}
               </div>
               {message.sender === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
-                  <span className="text-purple-300 text-sm">You</span>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-purple-500/30 bg-purple-900/50">
+                  <span className="text-sm text-purple-300">You</span>
                 </div>
               )}
             </div>
           ))}
           {isLoading && (
             <div className="flex items-end space-x-2">
-              <div className="w-8 h-8 rounded-full bg-purple-900/50 flex items-center justify-center border border-purple-500/30">
-                <span className="text-purple-300 text-sm">AI</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-purple-500/30 bg-purple-900/50">
+                <span className="text-sm text-purple-300">AI</span>
               </div>
-              <div className="bg-black p-4 rounded-2xl rounded-bl-none border border-purple-500/30 shadow-lg">
+              <div className="rounded-2xl rounded-bl-none border border-purple-500/30 bg-black p-4 shadow-lg">
                 <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}}></div>
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-purple-400"></div>
+                  <div
+                    className="h-2 w-2 animate-bounce rounded-full bg-purple-400"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
+                  <div
+                    className="h-2 w-2 animate-bounce rounded-full bg-purple-400"
+                    style={{ animationDelay: '0.4s' }}
+                  ></div>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        <form onSubmit={handleSend} className="flex gap-3 bg-black p-4 rounded-xl border border-purple-500/30">
+        <form
+          onSubmit={handleSend}
+          className="flex gap-3 rounded-xl border border-purple-500/30 bg-black p-4"
+        >
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 p-3 bg-purple-900/20 text-purple-100 border border-purple-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-purple-300/50"
+            className="flex-1 rounded-xl border border-purple-500/30 bg-purple-900/20 p-3 text-purple-100 placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
             disabled={isLoading}
           />
-          <button 
+          <button
             type="submit"
-            className={`px-6 py-3 bg-purple-900/50 text-purple-100 rounded-xl font-medium transition-all duration-200 border border-purple-500/30 ${
-              isLoading 
-                ? 'opacity-50 cursor-not-allowed' 
-                : 'hover:bg-purple-800/50 hover:shadow-lg active:transform active:scale-95'
+            className={`rounded-xl border border-purple-500/30 bg-purple-900/50 px-6 py-3 font-medium text-purple-100 transition-all duration-200 ${
+              isLoading
+                ? 'cursor-not-allowed opacity-50'
+                : 'hover:bg-purple-800/50 hover:shadow-lg active:scale-95 active:transform'
             }`}
             disabled={isLoading}
           >

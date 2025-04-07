@@ -48,6 +48,11 @@ export default function CreatePosts({
       return
     }
 
+    if (!selectedYear) {
+      setError('Please select your academic year level')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -84,28 +89,29 @@ export default function CreatePosts({
       // You could add a success notification here
       // For example, using a toast notification library
       // Show success toast notification
-      const successToast = document.createElement('div');
-      successToast.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 flex items-center';
+      const successToast = document.createElement('div')
+      successToast.className =
+        'fixed bottom-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-500 flex items-center'
       successToast.innerHTML = `
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
         </svg>
         <span>Post created successfully!</span>
-      `;
-      document.body.appendChild(successToast);
-      
+      `
+      document.body.appendChild(successToast)
+
       // Animate the toast in
       setTimeout(() => {
-        successToast.classList.add('opacity-100');
-      }, 10);
-      
+        successToast.classList.add('opacity-100')
+      }, 10)
+
       // Remove the toast after 3 seconds
       setTimeout(() => {
-        successToast.classList.add('opacity-0', 'translate-y-2');
+        successToast.classList.add('opacity-0', 'translate-y-2')
         setTimeout(() => {
-          document.body.removeChild(successToast);
-        }, 500);
-      }, 3000);
+          document.body.removeChild(successToast)
+        }, 500)
+      }, 3000)
     } catch (err) {
       setError(err.message || 'Failed to create post')
     } finally {

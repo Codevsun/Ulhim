@@ -1,6 +1,8 @@
 import { Home } from '../../pages/Home'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const posts = [
     {
       author: {
@@ -56,8 +58,7 @@ export default function Dashboard() {
       content: {
         name: 'Project Pulse',
         image: 'src/assets/healthpro.png',
-        badge: 'غلطني',
-        rating: '4.9',
+        badge: 'in progress',
         description: 'Revolutionizing student health tracking',
         borderColor: 'red',
       },
@@ -71,8 +72,7 @@ export default function Dashboard() {
       content: {
         name: 'Project Aurora',
         image: 'src/assets/studycompanion.png',
-        badge: 'ساعدني',
-        rating: '4.8',
+        badge: 'planning',
         description: 'AI-powered study companion',
         borderColor: 'yellow',
       },
@@ -86,8 +86,7 @@ export default function Dashboard() {
       content: {
         name: 'EcoTrack',
         image: 'src/assets/ecotruck.png',
-        badge: 'ساعدني',
-        rating: '4.7',
+        badge: 'completed',
         description: 'Track and reduce environmental impact',
       },
     },
@@ -127,7 +126,7 @@ export default function Dashboard() {
                   Dashboard Overview
                 </span>
                 <h1 className="bg-gradient-to-br from-white via-purple-200 to-blue-200 bg-clip-text text-4xl font-bold text-transparent">
-                  Welcome back, Explorer!
+                  Welcome back, Mlhim!
                 </h1>
               </div>
             </div>
@@ -143,11 +142,14 @@ export default function Dashboard() {
             </div>
 
             <div className="mt-10 flex gap-5">
-              <button className="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-8 py-3 text-sm font-medium text-white shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30">
+              <div className="group relative overflow-hidden rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-8 py-3 text-sm font-medium text-white shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/30">
                 <span className="relative z-10">Start Exploring</span>
                 <div className="absolute inset-0 z-0 bg-gradient-to-r from-purple-600 to-blue-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-              </button>
-              <button className="group rounded-full border-2 border-white/10 bg-white/5 px-8 py-3 text-sm font-medium text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/30 hover:bg-white/10 hover:text-white">
+              </div>
+              <button
+                className="group rounded-full border-2 border-white/10 bg-white/5 px-8 py-3 text-sm font-medium text-gray-300 backdrop-blur-sm transition-all duration-300 hover:border-purple-500/30 hover:bg-white/10 hover:text-white"
+                onClick={() => navigate('/posts')}
+              >
                 View Your Projects
                 <span className="ml-2 inline-block transition-transform duration-200 group-hover:translate-x-1">
                   →
@@ -276,16 +278,6 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between">
                             <span className="rounded-full bg-green-500/20 px-4 py-1.5 text-sm font-medium text-green-300 backdrop-blur-sm">
                               {projects[2].content.badge}
-                            </span>
-                            <span className="flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 text-sm text-white backdrop-blur-sm">
-                              <svg
-                                className="h-4 w-4 text-yellow-400"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                              </svg>
-                              {projects[2].content.rating}
                             </span>
                           </div>
                         </div>
@@ -459,16 +451,6 @@ export default function Dashboard() {
                           className={`rounded-full ${project.content.borderColor === 'red' ? 'bg-red-500/20 text-red-300' : project.content.borderColor === 'yellow' ? 'bg-yellow-500/20 text-yellow-300' : ''} px-4 py-1.5 text-sm font-medium backdrop-blur-sm`}
                         >
                           {project.content.badge}
-                        </span>
-                        <span className="flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 text-sm text-white backdrop-blur-sm">
-                          <svg
-                            className="h-4 w-4 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                          {project.content.rating}
                         </span>
                       </div>
                     </div>

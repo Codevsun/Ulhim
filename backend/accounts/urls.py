@@ -13,6 +13,7 @@ from .views import (
     UpdateProfileView,
     get_recommendations,
     SearchUsersView,
+    UserMajor,
 )
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     path("update-profile/", UpdateProfileView.as_view(), name="update-profile"),
     path("recommendations/", get_recommendations, name="recommendations"),
     path("search-users/", SearchUsersView.as_view(), name="search-users"),
+    path("user-major/", UserMajor.as_view(), name="user-major"),
 ]

@@ -541,3 +541,12 @@ class SearchUsersView(APIView):
             })
         
         return Response(results)
+    
+    
+class UserMajor(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user = request.user
+        return Response({"major": user.major}, status=status.HTTP_200_OK)
+    

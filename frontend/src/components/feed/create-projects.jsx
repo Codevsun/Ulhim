@@ -36,6 +36,10 @@ export default function CreateProjects({
       setError('Project image is required')
       return false
     }
+    if (!selectedYear) {
+      setError('Please select your academic year level')
+      return false
+    }
     return true
   }
 
@@ -204,7 +208,8 @@ export default function CreateProjects({
               />
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">Academic Year Level <span className="text-red-300">*</span></label>
               <div className="flex items-center gap-4">
                 <button
                   type="button"
@@ -256,7 +261,9 @@ export default function CreateProjects({
                   <span className="text-[10px] font-medium text-rose-300">5</span>
                 </button>
               </div>
+            </div>
 
+            <div className="flex items-center justify-end">
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting}
