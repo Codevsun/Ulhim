@@ -1,15 +1,20 @@
 import { useNavigate } from 'react-router-dom'
 import logo from '../assets/logo.png'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api, { mediaUrl } from '../services/api'
 import { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 export default function Profile({ children }) {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const [profileImage, setProfileImage] = useState(null)
   const fileInputRef = useRef(null)
+  const [editingSkills, setEditingSkills] = useState(false)
+  const [editingInterests, setEditingInterests] = useState(false)
+  const [newSkill, setNewSkill] = useState('')
+  const [newInterest, setNewInterest] = useState('')
 
   const {
     data: profile = {
@@ -39,7 +44,6 @@ export default function Profile({ children }) {
   const handleProfileImageClick = () => {
     fileInputRef.current.click()
   }
-  
 
   const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [uploadError, setUploadError] = useState(null)
@@ -88,6 +92,52 @@ export default function Profile({ children }) {
           // Error is already handled in uploadProfileImage
         })
     }
+  }
+
+  const updateSkillsMutation = useMutation({
+    mutationFn: async (skills) => {
+      return await api.post('user-skills-modify/', { skills })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['profile'])
+      setEditingSkills(false)
+    },
+  })
+
+  const updateInterestsMutation = useMutation({
+    mutationFn: async (interests) => {
+      return await api.post('user-interests-modify/', { interests })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['profile'])
+      setEditingInterests(false)
+    },
+  })
+
+  const handleAddSkill = () => {
+    if (newSkill.trim()) {
+      const updatedSkills = [...profile.skills, newSkill.trim()]
+      updateSkillsMutation.mutate(updatedSkills)
+      setNewSkill('')
+    }
+  }
+
+  const handleRemoveSkill = (skillToRemove) => {
+    const updatedSkills = profile.skills.filter((skill) => skill !== skillToRemove)
+    updateSkillsMutation.mutate(updatedSkills)
+  }
+
+  const handleAddInterest = () => {
+    if (newInterest.trim()) {
+      const updatedInterests = [...profile.interests, newInterest.trim()]
+      updateInterestsMutation.mutate(updatedInterests)
+      setNewInterest('')
+    }
+  }
+
+  const handleRemoveInterest = (interestToRemove) => {
+    const updatedInterests = profile.interests.filter((interest) => interest !== interestToRemove)
+    updateInterestsMutation.mutate(updatedInterests)
   }
 
   return (
@@ -307,32 +357,124 @@ export default function Profile({ children }) {
           <div className="col-span-3 space-y-6">
             {/* Skills Section */}
             <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
-              <h3 className="mb-4 text-lg font-medium text-white">Skills</h3>
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-medium text-white">Skills</h3>
+                <button
+                  onClick={() => setEditingSkills(!editingSkills)}
+                  className="text-sm text-purple-400 hover:text-purple-300"
+                >
+                  {editingSkills ? 'Done' : 'Edit'}
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {profile.skills.map((skill, index) => (
                   <span
                     key={index}
-                    className="transform cursor-default rounded-full border border-purple-500/40 bg-gradient-to-r from-purple-500/40 to-pink-500/40 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                    className="flex transform cursor-default items-center rounded-full border border-purple-500/40 bg-gradient-to-r from-purple-500/40 to-pink-500/40 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(168,85,247,0.4)]"
                   >
                     {skill}
+                    {editingSkills && (
+                      <button
+                        onClick={() => handleRemoveSkill(skill)}
+                        className="ml-2 text-white/70 hover:text-white"
+                      >
+                        <svg
+                          className="h-3 w-3"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
                   </span>
                 ))}
               </div>
+              {editingSkills && (
+                <div className="mt-4 flex">
+                  <input
+                    type="text"
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
+                    placeholder="Add a new skill"
+                    className="flex-1 rounded-l-lg bg-gray-700/50 px-3 py-2 text-white placeholder-gray-400 outline-none"
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
+                  />
+                  <button
+                    onClick={handleAddSkill}
+                    className="rounded-r-lg bg-purple-500 px-4 py-2 text-white hover:bg-purple-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Interests Section */}
             <div className="rounded-2xl border border-white/10 bg-gray-800/30 p-6 shadow-lg">
-              <h3 className="mb-4 text-lg font-medium text-white">Interests</h3>
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-lg font-medium text-white">Interests</h3>
+                <button
+                  onClick={() => setEditingInterests(!editingInterests)}
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                >
+                  {editingInterests ? 'Done' : 'Edit'}
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {profile.interests.map((interest, index) => (
                   <span
                     key={index}
-                    className="transform cursor-default rounded-full border border-blue-500/40 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                    className="flex transform cursor-default items-center rounded-full border border-blue-500/40 bg-gradient-to-r from-blue-500/30 to-cyan-500/30 px-3 py-1 text-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
                   >
                     {interest}
+                    {editingInterests && (
+                      <button
+                        onClick={() => handleRemoveInterest(interest)}
+                        className="ml-2 text-white/70 hover:text-white"
+                      >
+                        <svg
+                          className="h-3 w-3"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    )}
                   </span>
                 ))}
               </div>
+              {editingInterests && (
+                <div className="mt-4 flex">
+                  <input
+                    type="text"
+                    value={newInterest}
+                    onChange={(e) => setNewInterest(e.target.value)}
+                    placeholder="Add a new interest"
+                    className="flex-1 rounded-l-lg bg-gray-700/50 px-3 py-2 text-white placeholder-gray-400 outline-none"
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddInterest()}
+                  />
+                  <button
+                    onClick={handleAddInterest}
+                    className="rounded-r-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

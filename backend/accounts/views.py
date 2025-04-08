@@ -179,8 +179,13 @@ class TokenView(APIView):
                         status=status.HTTP_401_UNAUTHORIZED,
                     )
 
+                
                 # Generate JWT tokens
                 refresh = RefreshToken.for_user(user)
+
+                recommendation_engine.update_user_data(user.id)
+                recommendation_engine.refresh_data()  # or update_user_data(user.id)
+
                 return Response(
                     {
                         "refresh": str(refresh),
@@ -549,4 +554,43 @@ class UserMajor(APIView):
     def get(self, request):
         user = request.user
         return Response({"major": user.major}, status=status.HTTP_200_OK)
+    
+class UserPersonalInfoModify(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
+        major = request.data.get('major')
+        year_in_college = request.data.get('year_in_college')
+        user.first_name = first_name
+        user.last_name = last_name
+        user.major = major
+        user.year_in_college = year_in_college
+        user.save()
+        return Response({"message": "Personal info updated successfully."}, status=status.HTTP_200_OK)
+    
+
+class UserSkillsModify(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        skills = request.data.get('skills')
+        user.skills = skills
+        user.save()
+        return Response({"message": "Skills updated successfully."}, status=status.HTTP_200_OK)
+
+class UserInterestsModify(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        interests = request.data.get('interests')
+        user.interests = interests
+        user.save()
+        return Response({"message": "Interests updated successfully."}, status=status.HTTP_200_OK)
+    
+    
     

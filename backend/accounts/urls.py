@@ -14,6 +14,9 @@ from .views import (
     get_recommendations,
     SearchUsersView,
     UserMajor,
+    UserPersonalInfoModify,
+    UserSkillsModify,
+    UserInterestsModify,
 )
 
 urlpatterns = [
@@ -30,4 +33,7 @@ urlpatterns = [
     path("recommendations/", get_recommendations, name="recommendations"),
     path("search-users/", SearchUsersView.as_view(), name="search-users"),
     path("user-major/", UserMajor.as_view(), name="user-major"),
+    path("user-personal-info-modify/", UserPersonalInfoModify.as_view(), name="user-personal-info-modify"),
+    path("user-skills-modify/", UserSkillsModify.as_view(), name="user-skills-modify"),
+    path("user-interests-modify/", UserInterestsModify.as_view(), name="user-interests-modify"),
 ]
