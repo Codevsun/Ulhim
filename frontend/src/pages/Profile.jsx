@@ -375,7 +375,7 @@ export default function Profile({ children }) {
                     {skill}
                     {editingSkills && (
                       <button
-                        onClick={() => handleRemoveSkill(skill)}
+                      onClick={() => handleRemoveSkill(skill)}
                         className="ml-2 text-white/70 hover:text-white"
                       >
                         <svg

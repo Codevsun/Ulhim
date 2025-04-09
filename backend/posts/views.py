@@ -1,8 +1,9 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 from .models import Post, Project, Comment, Like
 from .serializers import (
     PostSerializer, 
@@ -102,3 +103,51 @@ class LikeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_year_stats(request, year_number):
+    user = request.user
+    
+    # Get posts stats for the specified year
+    posts = Post.objects.filter(author=user, level=year_number)
+    posts_by_category = posts.values('tag').annotate(count=Count('id'))
+    
+    # Get projects stats for the specified year
+    projects = Project.objects.filter(author=user, level=year_number)
+    projects_by_status = projects.values('status').annotate(count=Count('id'))
+    
+    # Format the response
+    stats = {
+        'posts': {
+            'total': posts.count(),
+            'byCategory': {
+                'article': 0,
+                'achievement': 0,
+                'certificate': 0,
+                'inspiration': 0,
+                'collaboration': 0,
+                'idea': 0
+            }
+        },
+        'projects': {
+            'total': projects.count(),
+            'byStatus': {
+                'planning': 0,
+                'in_progress': 0,
+                'completed': 0,
+                'graduation_project': 0
+            }
+        }
+    }
+    
+    # Fill in the actual counts
+    for post_category in posts_by_category:
+        stats['posts']['byCategory'][post_category['tag']] = post_category['count']
+        
+    for project_status in projects_by_status:
+        stats['projects']['byStatus'][project_status['status']] = project_status['count']
+    
+    return Response(stats)
+
+
