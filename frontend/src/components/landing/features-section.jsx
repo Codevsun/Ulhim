@@ -56,18 +56,18 @@ export default function FeaturesSection() {
     },
     {
       id: 4,
-      title: 'Advanced Analytics',
-      description: 'Data-driven insights for optimal learning',
+      title: 'Achievement Showcase',
+      description: 'Document and showcase your academic and extracurricular accomplishments',
       image: '/src/assets/2.png',
       icon: (
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       ),
-      iconColor: 'text-red-400',
+      iconColor: 'text-green-400',
       size: 'col-span-12 lg:col-span-7',
       height: 'h-[250px] sm:h-[300px]',
       titleSize: 'text-lg sm:text-xl',

@@ -224,9 +224,9 @@ class ProfileView(APIView):
                 "major": user.major,
                 "profile_image": user.profile_image.url if user.profile_image else None,
                 "stats": {
-                    "followers_count": 0,
-                    "following_count": 0,
-                    "posts_count": 2
+                    "followers_count": 55,
+                    "following_count": 413,
+                    "posts_count": 23
                 }
 
             }

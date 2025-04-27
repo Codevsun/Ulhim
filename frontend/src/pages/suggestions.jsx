@@ -60,17 +60,17 @@ export default function Suggestions() {
             tags: ['algorithms', 'visualization', 'education'],
           },
           {
-            title: 'Compiler Design Project',
+            title: 'Smart City Solution',
             description:
-              'Create a simple compiler or interpreter for a custom programming language.',
+              'Develop a prototype for a smart city application addressing local urban challenges.',
             difficulty: 'Advanced',
-            tags: ['compilers', 'languages', 'systems'],
+            tags: ['iot', 'urban-planning', 'sustainability'],
           },
           {
-            title: 'Distributed Systems Simulation',
-            description: 'Simulate distributed consensus algorithms like Raft or Paxos.',
+            title: 'Arabic NLP Tool',
+            description: 'Create a natural language processing tool optimized for Arabic text analysis.',
             difficulty: 'Advanced',
-            tags: ['distributed-systems', 'concurrency'],
+            tags: ['nlp', 'arabic', 'linguistics'],
           },
         ]
       case 'cybersecurity':
@@ -85,17 +85,17 @@ export default function Suggestions() {
             tags: ['security', 'web', 'scanning'],
           },
           {
-            title: 'Encryption Tool',
+            title: 'Critical Infrastructure Protection System',
             description:
-              'Build an application that demonstrates various encryption and hashing algorithms.',
-            difficulty: 'Intermediate',
-            tags: ['cryptography', 'security', 'privacy'],
+              'Design a security monitoring solution for energy or water infrastructure.',
+            difficulty: 'Advanced',
+            tags: ['infrastructure', 'security', 'monitoring'],
           },
           {
-            title: 'Network Intrusion Detection System',
-            description: 'Create a basic IDS that can detect suspicious network activity.',
+            title: 'Secure Digital Identity Solution',
+            description: 'Create a prototype for secure digital identity verification using blockchain.',
             difficulty: 'Advanced',
-            tags: ['network-security', 'monitoring', 'analysis'],
+            tags: ['identity', 'blockchain', 'authentication'],
           },
         ]
       case 'artificial intelligence':
@@ -103,24 +103,24 @@ export default function Suggestions() {
         return [
           ...commonProjects,
           {
-            title: 'AI-powered Chatbot',
-            description: 'Build a chatbot using natural language processing for customer support.',
+            title: 'Arabic-Optimized Chatbot',
+            description: 'Build a chatbot using natural language processing optimized for Arabic language.',
             difficulty: 'Advanced',
-            tags: ['ai', 'nlp', 'api'],
+            tags: ['ai', 'nlp', 'arabic'],
           },
           {
-            title: 'Image Recognition App',
+            title: 'Desert Environment Monitoring System',
             description:
-              'Develop an application that can identify objects in images using machine learning.',
+              'Develop an AI solution to monitor and analyze desert environmental conditions.',
             difficulty: 'Advanced',
-            tags: ['computer-vision', 'ml', 'deep-learning'],
+            tags: ['computer-vision', 'environmental', 'sensors'],
           },
           {
-            title: 'Recommendation System',
+            title: 'Smart Tourism Recommendation System',
             description:
-              'Build a content recommendation engine using collaborative filtering algorithms.',
+              'Build a recommendation engine for tourists visiting Saudi heritage sites.',
             difficulty: 'Intermediate',
-            tags: ['ml', 'data-science', 'algorithms'],
+            tags: ['ml', 'tourism', 'recommendation'],
           },
         ]
       case 'computer information systems':
@@ -128,46 +128,46 @@ export default function Suggestions() {
         return [
           ...commonProjects,
           {
-            title: 'E-commerce Platform',
+            title: 'E-commerce Platform for Local Artisans',
             description:
-              'Build a full-stack online store with payment processing and inventory management.',
+              'Build a full-stack online marketplace for traditional Saudi crafts and products.',
             difficulty: 'Advanced',
-            tags: ['web', 'fullstack', 'database'],
+            tags: ['web', 'fullstack', 'e-commerce'],
           },
           {
-            title: 'Business Intelligence Dashboard',
-            description: 'Create a data visualization dashboard for business metrics and KPIs.',
+            title: 'Business Intelligence Dashboard for SMEs',
+            description: 'Create a data visualization dashboard for small and medium Saudi enterprises.',
             difficulty: 'Intermediate',
             tags: ['data', 'visualization', 'business'],
           },
           {
-            title: 'Inventory Management System',
-            description: 'Develop a system to track inventory, sales, and generate reports.',
+            title: 'Hajj and Umrah Management System',
+            description: 'Develop a system to help manage pilgrim logistics and services.',
             difficulty: 'Intermediate',
-            tags: ['database', 'business', 'reporting'],
+            tags: ['database', 'logistics', 'services'],
           },
         ]
       default:
         return [
           ...commonProjects,
           {
-            title: 'E-commerce Platform',
+            title: 'Saudi Heritage Digital Archive',
             description:
-              'Build a full-stack online store with payment processing and inventory management.',
-            difficulty: 'Advanced',
-            tags: ['web', 'fullstack', 'database'],
+              'Build a platform to digitally preserve and showcase Saudi cultural heritage.',
+            difficulty: 'Intermediate',
+            tags: ['web', 'cultural', 'archive'],
           },
           {
-            title: 'Social Media Dashboard',
-            description: 'Develop an analytics dashboard for tracking social media metrics.',
+            title: 'Social Media Analytics Dashboard',
+            description: 'Develop an analytics dashboard for tracking regional social media trends.',
             difficulty: 'Intermediate',
             tags: ['web', 'api', 'data'],
           },
           {
-            title: 'AI-powered Chatbot',
-            description: 'Build a chatbot using natural language processing for customer support.',
+            title: 'Arabic-Optimized Chatbot',
+            description: 'Build a chatbot using natural language processing optimized for Arabic language.',
             difficulty: 'Advanced',
-            tags: ['ai', 'nlp', 'api'],
+            tags: ['ai', 'nlp', 'arabic'],
           },
         ]
     }
@@ -198,24 +198,24 @@ export default function Suggestions() {
           {
             title: 'Software Engineer',
             description:
-              'Design and develop complex software systems and applications using various programming languages and technologies.',
+              'Design and develop complex software systems and applications for Saudi government and private sector initiatives.',
             skills: ['Algorithms', 'Data Structures', 'System Design', 'Programming Languages'],
           },
           {
-            title: 'Systems Architect',
+            title: 'Smart City Solutions Architect',
             description:
-              'Design and oversee the implementation of complex IT systems and infrastructure.',
+              'Design and oversee the implementation of smart city technologies aligned with Vision 2030.',
             skills: [
               'System Design',
-              'Architecture Patterns',
+              'IoT Architecture',
               'Technical Leadership',
-              'Performance Optimization',
+              'Urban Planning',
             ],
           },
           {
             title: 'Research Scientist',
             description:
-              'Conduct research to solve complex computing problems and advance the field of computer science.',
+              'Conduct research at KAUST, KFUPM, or other Saudi research institutions to solve complex computing problems.',
             skills: [
               'Research Methods',
               'Academic Writing',
@@ -229,15 +229,15 @@ export default function Suggestions() {
         return [
           ...commonCareers,
           {
-            title: 'Security Analyst',
+            title: 'National Security Analyst',
             description:
-              'Monitor and analyze security threats and implement solutions to protect digital assets.',
+              'Monitor and analyze security threats to protect critical Saudi infrastructure and digital assets.',
             skills: ['Threat Analysis', 'Security Tools', 'Incident Response', 'Risk Assessment'],
           },
           {
             title: 'Penetration Tester',
             description:
-              'Conduct authorized simulated attacks on computer systems to identify security vulnerabilities.',
+              'Conduct authorized simulated attacks on computer systems to identify security vulnerabilities in Saudi organizations.',
             skills: [
               'Ethical Hacking',
               'Vulnerability Assessment',
@@ -246,14 +246,14 @@ export default function Suggestions() {
             ],
           },
           {
-            title: 'Security Architect',
+            title: 'Energy Sector Security Specialist',
             description:
-              'Design secure systems and networks that protect against cyber threats and ensure data integrity.',
+              'Design secure systems and networks that protect Saudi energy infrastructure against cyber threats.',
             skills: [
               'Security Frameworks',
-              'Network Security',
+              'SCADA Security',
               'Identity Management',
-              'Secure Architecture',
+              'Critical Infrastructure Protection',
             ],
           },
         ]
@@ -264,19 +264,19 @@ export default function Suggestions() {
           {
             title: 'Machine Learning Engineer',
             description:
-              'Develop and implement machine learning models and algorithms for various applications.',
+              'Develop and implement machine learning models for Saudi organizations in healthcare, energy, and government sectors.',
             skills: ['Python', 'ML Frameworks', 'Data Processing', 'Model Deployment'],
           },
           {
             title: 'AI Research Scientist',
             description:
-              'Conduct research to advance the field of artificial intelligence and develop new algorithms.',
+              'Conduct research at SDAIA, KAUST, or other Saudi institutions to advance AI capabilities.',
             skills: ['Deep Learning', 'Research Methods', 'Mathematics', 'NLP/Computer Vision'],
           },
           {
             title: 'Data Scientist',
             description:
-              'Analyze and interpret complex data using statistical methods, machine learning, and data visualization.',
+              'Analyze and interpret complex data for Saudi organizations using statistical methods and machine learning.',
             skills: ['Python', 'Statistics', 'Machine Learning', 'Data Visualization'],
           },
         ]
@@ -285,27 +285,27 @@ export default function Suggestions() {
         return [
           ...commonCareers,
           {
-            title: 'Business Analyst',
+            title: 'Digital Transformation Consultant',
             description:
-              'Bridge the gap between IT and business needs, analyzing requirements and proposing solutions.',
+              'Bridge the gap between IT and business needs for Saudi organizations undergoing digital transformation.',
             skills: [
               'Requirements Analysis',
               'Business Processes',
-              'Data Analysis',
+              'Change Management',
               'Communication',
             ],
           },
           {
             title: 'IT Project Manager',
             description:
-              'Plan, execute, and oversee IT projects to ensure they meet business objectives.',
+              'Plan and oversee IT projects for Saudi government initiatives and private sector companies.',
             skills: ['Project Management', 'Agile/Scrum', 'Budgeting', 'Stakeholder Management'],
           },
           {
-            title: 'Database Administrator',
+            title: 'E-Government Solutions Specialist',
             description:
-              'Design, implement, and maintain database systems to ensure data integrity and performance.',
-            skills: ['SQL', 'Database Design', 'Performance Tuning', 'Data Security'],
+              'Design and implement digital government services to improve citizen experience.',
+            skills: ['Digital Services', 'User Experience', 'System Integration', 'Data Security'],
           },
         ]
       default:
@@ -314,19 +314,19 @@ export default function Suggestions() {
           {
             title: 'Frontend Developer',
             description:
-              'Focus on creating user interfaces and experiences using HTML, CSS, JavaScript, and frameworks like React or Vue.',
+              'Create user interfaces and experiences for Saudi websites and applications using modern frameworks.',
             skills: ['HTML/CSS', 'JavaScript', 'React/Vue', 'UI/UX'],
           },
           {
             title: 'Backend Developer',
             description:
-              'Work with server-side logic, databases, and APIs using technologies like Node.js, Python, or Java.',
+              'Work with server-side logic and databases for Saudi organizations and government services.',
             skills: ['Node.js/Python/Java', 'Databases', 'API Design', 'Security'],
           },
           {
             title: 'Data Scientist',
             description:
-              'Analyze and interpret complex data using statistical methods, machine learning, and data visualization.',
+              'Analyze data for Saudi organizations to drive business decisions and improve services.',
             skills: ['Python', 'Statistics', 'Machine Learning', 'Data Visualization'],
           },
         ]
@@ -336,14 +336,14 @@ export default function Suggestions() {
   // Define companies based on major
   const getCompanies = () => {
     const commonCompanies = [
-      { name: 'Google', focus: 'Search, Cloud Computing, AI', internships: true, logo: '🌐' },
+      { name: 'Saudi Aramco', focus: 'Energy, Digital Transformation, AI', internships: true, logo: '🛢️' },
       {
-        name: 'Microsoft',
-        focus: 'Software, Cloud Services, Hardware',
+        name: 'NEOM',
+        focus: 'Smart City, Sustainability, Innovation',
         internships: true,
-        logo: '🪟',
+        logo: '🏙️',
       },
-      { name: 'Amazon', focus: 'E-commerce, Cloud Computing, AI', internships: true, logo: '📦' },
+      { name: 'STC', focus: 'Telecommunications, Digital Services, Cloud', internships: true, logo: '📱' },
     ]
 
     switch (userMajor.toLowerCase()) {
@@ -351,19 +351,19 @@ export default function Suggestions() {
       case 'cs':
         return [
           ...commonCompanies,
-          { name: 'Apple', focus: 'Hardware, Software, Services', internships: true, logo: '🍎' },
-          { name: 'Meta', focus: 'Social Media, VR/AR, AI', internships: true, logo: '👥' },
+          { name: 'SABIC', focus: 'Petrochemicals, Digital Transformation', internships: true, logo: '⚗️' },
+          { name: 'Misk Foundation', focus: 'Youth Empowerment, Innovation', internships: true, logo: '🚀' },
           {
-            name: 'Oracle',
-            focus: 'Database, Enterprise Software, Cloud',
+            name: 'SDAIA',
+            focus: 'Data & AI, National Strategy, Smart Government',
             internships: true,
-            logo: '☁️',
+            logo: '🧠',
           },
           {
-            name: 'IBM',
-            focus: 'Enterprise Solutions, AI, Quantum Computing',
+            name: 'KAUST',
+            focus: 'Research, Innovation, Technology Development',
             internships: true,
-            logo: '💼',
+            logo: '🔬',
           },
         ]
       case 'cybersecurity':
@@ -371,28 +371,28 @@ export default function Suggestions() {
         return [
           ...commonCompanies,
           {
-            name: 'Palo Alto Networks',
-            focus: 'Network Security, Threat Detection',
+            name: 'National Cybersecurity Authority',
+            focus: 'National Security, Cyber Defense',
             internships: true,
             logo: '🔒',
           },
           {
-            name: 'CrowdStrike',
-            focus: 'Endpoint Protection, Threat Intelligence',
+            name: 'Saudi Aramco',
+            focus: 'Energy Infrastructure Security, OT/IT Security',
+            internships: true,
+            logo: '🛢️',
+          },
+          {
+            name: 'Elm',
+            focus: 'Digital Security, Government Solutions',
             internships: true,
             logo: '🛡️',
           },
           {
-            name: 'FireEye',
-            focus: 'Cyber Threat Intelligence, Security Solutions',
+            name: 'STC',
+            focus: 'Telecommunications Security, Digital Infrastructure',
             internships: true,
-            logo: '🔥',
-          },
-          {
-            name: 'Cisco',
-            focus: 'Network Infrastructure, Security Solutions',
-            internships: true,
-            logo: '🌉',
+            logo: '📱',
           },
         ]
       case 'artificial intelligence':
@@ -400,28 +400,28 @@ export default function Suggestions() {
         return [
           ...commonCompanies,
           {
-            name: 'OpenAI',
-            focus: 'AI Research, Large Language Models',
+            name: 'SDAIA',
+            focus: 'National AI Strategy, Data Analytics',
             internships: true,
             logo: '🧠',
           },
           {
-            name: 'NVIDIA',
-            focus: 'GPU, AI Hardware, Deep Learning',
-            internships: true,
-            logo: '🖥️',
-          },
-          {
-            name: 'DeepMind',
-            focus: 'AI Research, Reinforcement Learning',
-            internships: true,
-            logo: '🤖',
-          },
-          {
-            name: 'Anthropic',
-            focus: 'AI Safety, Large Language Models',
+            name: 'KAUST AI Initiative',
+            focus: 'AI Research, Deep Learning, Computer Vision',
             internships: true,
             logo: '🔬',
+          },
+          {
+            name: 'Noon',
+            focus: 'E-commerce, AI Recommendations, Analytics',
+            internships: true,
+            logo: '🛒',
+          },
+          {
+            name: 'Saudi Aramco Digital',
+            focus: 'Energy AI, Predictive Maintenance, Optimization',
+            internships: true,
+            logo: '🛢️',
           },
         ]
       case 'computer information systems':
@@ -429,58 +429,58 @@ export default function Suggestions() {
         return [
           ...commonCompanies,
           {
-            name: 'Salesforce',
-            focus: 'CRM, Cloud Solutions, Business Analytics',
-            internships: true,
-            logo: '☁️',
-          },
-          {
-            name: 'SAP',
-            focus: 'Enterprise Software, Business Intelligence',
+            name: 'Elm',
+            focus: 'E-Government, Digital Solutions, Smart Services',
             internships: true,
             logo: '💼',
           },
           {
-            name: 'Oracle',
-            focus: 'Database, Enterprise Software, Cloud',
+            name: 'Al Rajhi Bank',
+            focus: 'Fintech, Digital Banking, Business Intelligence',
             internships: true,
-            logo: '📊',
+            logo: '🏦',
           },
           {
-            name: 'ServiceNow',
-            focus: 'IT Service Management, Workflow Automation',
+            name: 'Tamkeen Technologies',
+            focus: 'Government Digital Transformation, IT Services',
             internships: true,
             logo: '⚙️',
+          },
+          {
+            name: 'Thiqah',
+            focus: 'Business Services, Digital Solutions',
+            internships: true,
+            logo: '📊',
           },
         ]
       default:
         return [
-          { name: 'Google', focus: 'Search, Cloud Computing, AI', internships: true, logo: '🌐' },
+          { name: 'Saudi Aramco', focus: 'Energy, Digital Transformation, AI', internships: true, logo: '🛢️' },
           {
-            name: 'Microsoft',
-            focus: 'Software, Cloud Services, Hardware',
+            name: 'NEOM',
+            focus: 'Smart City, Sustainability, Innovation',
             internships: true,
-            logo: '🪟',
+            logo: '🏙️',
           },
           {
-            name: 'Amazon',
-            focus: 'E-commerce, Cloud Computing, AI',
+            name: 'STC',
+            focus: 'Telecommunications, Digital Services, Cloud',
             internships: true,
-            logo: '📦',
+            logo: '📱',
           },
-          { name: 'Apple', focus: 'Hardware, Software, Services', internships: true, logo: '🍎' },
-          { name: 'Meta', focus: 'Social Media, VR/AR, AI', internships: true, logo: '👥' },
+          { name: 'SABIC', focus: 'Petrochemicals, Digital Transformation', internships: true, logo: '⚗️' },
+          { name: 'Misk Foundation', focus: 'Youth Empowerment, Innovation', internships: true, logo: '🚀' },
           {
-            name: 'Netflix',
-            focus: 'Streaming, Content Delivery, Data Analytics',
-            internships: false,
-            logo: '🎬',
-          },
-          {
-            name: 'Spotify',
-            focus: 'Music Streaming, Content Recommendation',
+            name: 'Noon',
+            focus: 'E-commerce, Logistics, Digital Marketplace',
             internships: true,
-            logo: '🎵',
+            logo: '🛒',
+          },
+          {
+            name: 'Tawuniya',
+            focus: 'Insurance, Digital Services, Data Analytics',
+            internships: true,
+            logo: '🔰',
           },
         ]
     }
@@ -490,15 +490,15 @@ export default function Suggestions() {
   const getResources = () => {
     const commonResources = [
       {
-        name: 'freeCodeCamp',
+        name: 'Saudi Digital Academy',
         type: 'Learning Platform',
-        url: 'https://www.freecodecamp.org/',
+        url: 'https://sda.edu.sa/',
         icon: '🎓',
       },
       {
-        name: 'GitHub Student Developer Pack',
-        type: 'Tools & Resources',
-        url: 'https://education.github.com/pack',
+        name: 'Misk Skills',
+        type: 'Skills Development',
+        url: 'https://misk.org.sa/',
         icon: '🎒',
       },
     ]
@@ -508,24 +508,24 @@ export default function Suggestions() {
       case 'cs':
         return [
           ...commonResources,
-          { name: 'LeetCode', type: 'Coding Practice', url: 'https://leetcode.com/', icon: '💻' },
+          { name: 'Saudi Codes', type: 'Coding Initiative', url: 'https://saudicodes.org/', icon: '💻' },
           {
-            name: 'HackerRank',
-            type: 'Coding Challenges',
-            url: 'https://www.hackerrank.com/',
-            icon: '⌨️',
-          },
-          {
-            name: 'MIT OpenCourseWare',
-            type: 'Academic Courses',
-            url: 'https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/',
+            name: 'KAUST Open Courses',
+            type: 'Academic Resources',
+            url: 'https://www.kaust.edu.sa/',
             icon: '🏛️',
           },
           {
-            name: 'Stack Overflow',
-            type: 'Community Q&A',
-            url: 'https://stackoverflow.com/',
-            icon: '❓',
+            name: 'Duroob Platform',
+            type: 'E-learning',
+            url: 'https://www.duroob.sa/',
+            icon: '📚',
+          },
+          {
+            name: 'Saudi Tech Community',
+            type: 'Developer Network',
+            url: 'https://developer.sa/',
+            icon: '👨‍💻',
           },
         ]
       case 'cybersecurity':
@@ -533,23 +533,28 @@ export default function Suggestions() {
         return [
           ...commonResources,
           {
-            name: 'TryHackMe',
-            type: 'Hands-on Learning',
-            url: 'https://tryhackme.com/',
+            name: 'National Cybersecurity Authority Resources',
+            type: 'Security Guidelines',
+            url: 'https://nca.gov.sa/',
             icon: '🔐',
           },
           {
-            name: 'HackTheBox',
-            type: 'Penetration Testing Practice',
-            url: 'https://www.hackthebox.com/',
-            icon: '📦',
+            name: 'Saudi Federation for Cybersecurity',
+            type: 'Training & Certification',
+            url: 'https://safcsp.org.sa/',
+            icon: '🛡️',
           },
-          { name: 'OWASP', type: 'Security Resources', url: 'https://owasp.org/', icon: '🛡️' },
           {
-            name: 'Cybrary',
-            type: 'Cybersecurity Courses',
-            url: 'https://www.cybrary.it/',
-            icon: '🔒',
+            name: 'Cyber Security Education Initiative',
+            type: 'Educational Resources',
+            url: 'https://hemaya.sa/',
+            icon: '📚',
+          },
+          {
+            name: 'Saudi CERT',
+            type: 'Security Alerts & Guidance',
+            url: 'https://cert.gov.sa/',
+            icon: '🔔',
           },
         ]
       case 'artificial intelligence':
@@ -557,28 +562,28 @@ export default function Suggestions() {
         return [
           ...commonResources,
           {
-            name: 'Kaggle',
-            type: 'Data Science Competitions',
-            url: 'https://www.kaggle.com/',
-            icon: '📊',
-          },
-          {
-            name: 'Coursera - Deep Learning Specialization',
-            type: 'Online Course',
-            url: 'https://www.coursera.org/specializations/deep-learning',
+            name: 'SDAIA Academy',
+            type: 'AI Training',
+            url: 'https://academy.sdaia.gov.sa/',
             icon: '🧠',
           },
           {
-            name: 'Papers With Code',
-            type: 'Research Implementation',
-            url: 'https://paperswithcode.com/',
-            icon: '📝',
+            name: 'Thakaa Center',
+            type: 'AI Research & Resources',
+            url: 'https://thakaa.sa/',
+            icon: '🤖',
           },
           {
-            name: 'Hugging Face',
-            type: 'ML Models & Datasets',
-            url: 'https://huggingface.co/',
-            icon: '🤗',
+            name: 'KAUST AI Initiative',
+            type: 'Research & Innovation',
+            url: 'https://ai.kaust.edu.sa/',
+            icon: '🔬',
+          },
+          {
+            name: 'Saudi Data Community',
+            type: 'Data Science Network',
+            url: 'https://saudidevorg.github.io/community/',
+            icon: '📊',
           },
         ]
       case 'computer information systems':
@@ -586,53 +591,68 @@ export default function Suggestions() {
         return [
           ...commonResources,
           {
-            name: 'Tableau Public',
-            type: 'Data Visualization',
-            url: 'https://public.tableau.com/',
-            icon: '📈',
+            name: 'Digital Government Authority',
+            type: 'E-Government Resources',
+            url: 'https://dga.gov.sa/',
+            icon: '🏛️',
           },
           {
-            name: 'Salesforce Trailhead',
-            type: 'CRM Learning',
-            url: 'https://trailhead.salesforce.com/',
-            icon: '☁️',
+            name: 'Yesser E-Government Program',
+            type: 'Digital Transformation',
+            url: 'https://www.yesser.gov.sa/',
+            icon: '⚙️',
           },
-          { name: 'ERDPlus', type: 'Database Modeling', url: 'https://erdplus.com/', icon: '💾' },
           {
-            name: 'PMI Resources',
-            type: 'Project Management',
-            url: 'https://www.pmi.org/learning/library',
-            icon: '📋',
+            name: 'Saudi Digital Library',
+            type: 'Academic Resources',
+            url: 'https://portal.sdl.edu.sa/',
+            icon: '📚',
+          },
+          {
+            name: 'Monshaat Tech Resources',
+            type: 'SME Digital Solutions',
+            url: 'https://www.monshaat.gov.sa/',
+            icon: '💼',
           },
         ]
       default:
         return [
           {
-            name: 'freeCodeCamp',
+            name: 'Saudi Digital Academy',
             type: 'Learning Platform',
-            url: 'https://www.freecodecamp.org/',
+            url: 'https://sda.edu.sa/',
             icon: '🎓',
           },
           {
-            name: 'GitHub Student Developer Pack',
-            type: 'Tools & Resources',
-            url: 'https://education.github.com/pack',
+            name: 'Misk Skills',
+            type: 'Skills Development',
+            url: 'https://misk.org.sa/',
             icon: '🎒',
           },
-          { name: 'LeetCode', type: 'Coding Practice', url: 'https://leetcode.com/', icon: '💻' },
           {
-            name: 'Coursera',
-            type: 'Online Courses',
-            url: 'https://www.coursera.org/',
+            name: 'Duroob Platform',
+            type: 'E-learning',
+            url: 'https://www.duroob.sa/',
             icon: '📚',
           },
           {
-            name: 'Stack Overflow',
-            type: 'Community Q&A',
-            url: 'https://stackoverflow.com/',
-            icon: '❓',
+            name: 'Udacity-MCIT Scholarship',
+            type: 'Tech Scholarships',
+            url: 'https://www.udacity.com/mena-scholarship',
+            icon: '🎯',
           },
-          { name: 'Dev.to', type: 'Developer Community', url: 'https://dev.to/', icon: '👨‍💻' },
+          {
+            name: 'Saudi Digital Library',
+            type: 'Academic Resources',
+            url: 'https://portal.sdl.edu.sa/',
+            icon: '📖',
+          },
+          {
+            name: 'Maharah Platform',
+            type: 'Skills Development',
+            url: 'https://maharah.hrc.gov.sa/',
+            icon: '👨‍💻',
+          },
         ]
     }
   }

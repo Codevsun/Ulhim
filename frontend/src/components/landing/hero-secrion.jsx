@@ -11,7 +11,7 @@ export default function HeroSection() {
       </div>
       <section className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-t from-black to-[#0a0611] font-semibold text-white">
         {/* Purple blur effects with reduced opacity */}
-        <div className="absolute left-1/2 top-20 z-20 -translate-x-1/2 transform sm:top-40">
+        <div className="absolute left-1/2 top-10 z-20 -translate-x-1/2 transform sm:top-40 ">
           <div className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-medium text-white backdrop-blur-sm sm:text-sm">
             ✨ Early Access Now Available
           </div>
@@ -21,7 +21,7 @@ export default function HeroSection() {
           <div className="absolute bottom-1/4 right-1/4 h-[400px] w-[400px] rounded-full bg-violet-900/10 blur-[150px] sm:h-[600px] sm:w-[600px]" />
         </div>
 
-        <div className="relative z-10 -mt-24 px-4 sm:-mt-48 sm:px-8">
+        <div className="relative z-10 mt-8 px-4 sm:mt-4 sm:px-8">
           <h1 className="w-full max-w-[1800px] text-center text-4xl font-semibold leading-[120%] tracking-tight sm:text-5xl lg:text-6xl">
             <span className="block bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
               Empowering Your Journey,

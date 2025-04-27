@@ -126,7 +126,7 @@ export default function Dashboard() {
                   Dashboard Overview
                 </span>
                 <h1 className="bg-gradient-to-br from-white via-purple-200 to-blue-200 bg-clip-text text-4xl font-bold text-transparent">
-                  Welcome back, Mlhim!
+                  Welcome back, Mulhim!
                 </h1>
               </div>
             </div>
@@ -318,7 +318,7 @@ export default function Dashboard() {
                 </span>
                 Trending posts
               </h2>
-              <button className="rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-all duration-300 hover:bg-purple-500/20 hover:text-purple-300">
+              <button className="rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-all duration-300 hover:bg-purple-500/20 hover:text-purple-300" onClick={() => navigate('/posts')}>
                 View All
               </button>
             </div>
@@ -427,7 +427,7 @@ export default function Dashboard() {
                 </svg>
                 Featured Projects
               </h2>
-              <button className="rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-all duration-300 hover:bg-purple-500/20 hover:text-purple-300">
+              <button className="rounded-full bg-purple-500/10 px-4 py-2 text-sm font-medium text-purple-400 transition-all duration-300 hover:bg-purple-500/20 hover:text-purple-300" onClick={() => navigate('/posts')}>
                 Discover More
               </button>
             </div>

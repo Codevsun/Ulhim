@@ -315,20 +315,7 @@ export default function Profile({ children }) {
                     </svg>
                     Feed
                   </button>
-                  <button
-                    onClick={() => navigate('/chat')}
-                    className="flex w-full items-center gap-3 rounded-lg border-b border-white/5 px-4 py-3 text-gray-300 hover:bg-white/5"
-                  >
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1.5}
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      />
-                    </svg>
-                    Chat
-                  </button>
+
                   <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-gray-300 hover:bg-white/5">
                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path
@@ -375,7 +362,7 @@ export default function Profile({ children }) {
                     {skill}
                     {editingSkills && (
                       <button
-                      onClick={() => handleRemoveSkill(skill)}
+                        onClick={() => handleRemoveSkill(skill)}
                         className="ml-2 text-white/70 hover:text-white"
                       >
                         <svg

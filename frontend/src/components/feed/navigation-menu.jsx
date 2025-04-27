@@ -47,7 +47,10 @@ export default function NavigationMenu() {
           </svg>
           For You
         </button>
-        <div className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400">
+        <button
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
+          onClick={() => navigate('/groups')}
+        >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -57,28 +60,26 @@ export default function NavigationMenu() {
             />
           </svg>
           Groups
-          <span className="ml-1 text-sm text-gray-500">(Coming Soon)</span>
-        </div>
-        <div className="flex w-full cursor-not-allowed items-center gap-3 rounded-lg px-4 py-2.5 text-gray-400">
+        </button>
+        <button
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
+          onClick={() => navigate('/companies')}
+        >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
-              strokeLinecap="round"
+            strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={1.5}
-              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"
             />
           </svg>
-          Games
-          <span className="ml-1 text-sm text-gray-500">(Coming Soon)</span>
-        </div>
+          Companies
+        </button>
 
-        <button className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5">
+        <button
+          className="flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-gray-300 hover:bg-white/5"
+          onClick={() => navigate('/settings')}
+        >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"

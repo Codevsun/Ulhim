@@ -180,15 +180,42 @@ export default function CreatePosts({
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category.name}
-                  onClick={() => handleCategorySelection(category.name)}
-                  className={`rounded-full bg-${category.color}-500/${selectedCategory === category.name ? '30' : '10'} px-3 py-1.5 text-sm text-${category.color}-300 transition-colors hover:bg-${category.color}-500/20 ${selectedCategory === category.name ? 'ring- ring-1' + category.color + '-400' : ''}`}
-                >
-                  {category.name}
-                </button>
-              ))}
+              {categories.map((category) => {
+                let buttonClass = ''
+
+                if (category.name === 'Certificate') {
+                  buttonClass =
+                    selectedCategory === category.name
+                      ? 'bg-pink-500/30 text-pink-300 hover:bg-pink-500/20'
+                      : 'bg-pink-500/10 text-pink-300 hover:bg-pink-500/20'
+                } else if (category.name === 'Idea') {
+                  buttonClass =
+                    selectedCategory === category.name
+                      ? 'bg-yellow-500/30 text-yellow-300 hover:bg-yellow-500/20'
+                      : 'bg-yellow-500/10 text-yellow-300 hover:bg-yellow-500/20'
+                } else if (category.name === 'Collaboration') {
+                  buttonClass =
+                    selectedCategory === category.name
+                      ? 'bg-green-500/30 text-green-300 hover:bg-green-500/20'
+                      : 'bg-green-500/10 text-green-300 hover:bg-green-500/20'
+                } else {
+                  buttonClass = `bg-${category.color}-500/${selectedCategory === category.name ? '30' : '10'} text-${category.color}-300 hover:bg-${category.color}-500/20`
+                }
+
+                return (
+                  <button
+                    key={category.name}
+                    onClick={() => handleCategorySelection(category.name)}
+                    className={`rounded-full ${buttonClass} px-3 py-1.5 text-sm transition-colors ${
+                      selectedCategory === category.name
+                        ? `ring-1 ring-${category.color === 'pink' ? 'pink' : category.color === 'yellow' ? 'yellow' : category.color === 'green' ? 'green' : category.color}-400`
+                        : ''
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                )
+              })}
             </div>
 
             <div className="flex items-center justify-between">
