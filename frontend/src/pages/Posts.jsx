@@ -2,12 +2,15 @@ import { Home } from './Home'
 import { useState, useEffect } from 'react'
 import Filter from '../components/feed/filters'
 import FloatingActionButton from '../components/feed/flaoting-action-button'
+import Comments from '../components/feed/Comments'
 import { ACCESS_TOKEN } from '../constants'
 
 export default function Posts() {
   const [feedItems, setFeedItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [comments, setComments] = useState({})
+  const [visibleComments, setVisibleComments] = useState({}) // Track which comments are visible
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,8 +56,8 @@ export default function Posts() {
           content: post.content,
           tag: post.tag,
           stats: {
-            inspired: post.inspired_count,
-            comments: post.comment_count,
+            inspired: post.likes ? post.likes.length : post.inspired_count || 0,
+            comments: post.comments ? post.comments.length : post.comment_count || 0,
           },
           isLiked: post.is_liked || false,
         }))
@@ -70,14 +73,14 @@ export default function Posts() {
                 ? 'red'
                 : project.status === 'planning'
                   ? 'yellow'
-                  : project.status === 'graduation project'
+                  : project.status === 'graduation_project'
                     ? 'purple'
                     : 'green',
             image: project.image || 'https://images.unsplash.com/photo-1551434678-e076c223a692',
             name: project.name,
             badge: project.status.replace('_', ' '),
             description: project.description,
-            isGraduationProject: project.status === 'graduation project',
+            isGraduationProject: project.status === 'graduation_project',
           },
           author: {
             image:
@@ -116,6 +119,8 @@ export default function Posts() {
       })
 
       if (!response.ok && response.status !== 204) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Like action failed:', response.status, errorData)
         throw new Error(`Like action failed with status: ${response.status}`)
       }
 
@@ -138,7 +143,67 @@ export default function Posts() {
       )
     } catch (error) {
       console.error('Error liking post:', error)
+      // Could show a toast or error message here
     }
+  }
+
+  const toggleComments = async (postId) => {
+    // Toggle comments visibility
+    setVisibleComments(prev => {
+      const newState = {...prev}
+      newState[postId] = !newState[postId]
+      
+      // If turning comments on and we don't have them yet, fetch them
+      if (newState[postId] && !comments[postId]) {
+        fetchComments(postId)
+      }
+      
+      return newState
+    })
+  }
+
+  const fetchComments = async (postId) => {
+    console.log('Fetching comments for post:', postId)
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/posts/posts/${postId}/comments/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}`,
+        },
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Failed to fetch comments:', response.status, errorData)
+        throw new Error(`Failed to fetch comments: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setComments((prev) => ({ ...prev, [postId]: data }))
+      
+      // Update the comment count in the feed items
+      setFeedItems((prevItems) =>
+        prevItems.map((item) => {
+          if (item.type === 'post' && item.id === postId) {
+            return {
+              ...item,
+              stats: {
+                ...item.stats,
+                comments: data.length,
+              },
+            }
+          }
+          return item
+        })
+      )
+    } catch (error) {
+      console.error('Error fetching comments:', error)
+      // You could show an error message to the user here
+    }
+  }
+  
+  const handleCommentAdded = (postId) => {
+    // Refetch comments to get the updated list
+    fetchComments(postId)
   }
 
   if (loading) {
@@ -326,7 +391,10 @@ export default function Posts() {
             <span className="text-sm font-medium">{post.stats.inspired} Inspired</span>
           </button>
 
-          <button className="flex items-center gap-2 transition-all duration-300 hover:text-purple-400">
+          <button
+            className="flex items-center gap-2 transition-all duration-300 hover:text-purple-400"
+            onClick={() => toggleComments(post.id)}
+          >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
@@ -350,6 +418,41 @@ export default function Posts() {
             <span className="text-sm font-medium">Share Story</span>
           </button>
         </div>
+
+        {/* Comments section */}
+        {visibleComments[post.id] && (
+          <div className="mt-4 border-t border-gray-700 pt-4">
+            <h3 className="mb-2 text-lg font-medium text-white">Comments</h3>
+            <div className="space-y-4">
+              {comments[post.id] && comments[post.id].length > 0 ? (
+                comments[post.id].map((comment) => (
+                  <div key={comment.id} className="flex gap-3">
+                    <img
+                      src={
+                        comment.author.profile_image ||
+                        `https://api.dicebear.com/6.x/avataaars/svg?seed=${comment.author.username}`
+                      }
+                      alt={comment.author.username}
+                      className="h-8 w-8 rounded-full"
+                    />
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-white">{comment.author.username}</span>
+                        <span className="text-xs text-gray-400">
+                          {formatDate(new Date(comment.created_at))}
+                        </span>
+                      </div>
+                      <p className="text-gray-300">{comment.content}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-400">No comments yet. Be the first to comment!</div>
+              )}
+            </div>
+            <Comments postId={post.id} onCommentAdded={() => handleCommentAdded(post.id)} />
+          </div>
+        )}
       </div>
     </div>
   )

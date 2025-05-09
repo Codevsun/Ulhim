@@ -13,15 +13,18 @@ export function SignInForm() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    agreeToTerms: false
   })
 
   const [errors, setErrors] = useState({
     email: '',
     password: '',
+    agreeToTerms: '',
     form: '',
   })
 
   const [isLoading, setIsLoading] = useState(false)
+  const [showTerms, setShowTerms] = useState(false)
 
   const validateEmail = (email) => {
     const iauPattern = /^[a-zA-Z0-9._%+-]+@iau\.edu\.sa$/
@@ -29,8 +32,11 @@ export function SignInForm() {
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setFormData((prev) => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }))
     setErrors((prev) => ({ ...prev, [name]: '', form: '' }))
   }
 
@@ -46,6 +52,10 @@ export function SignInForm() {
 
     if (!formData.password) {
       newErrors.password = 'Password is required'
+    }
+
+    if (!formData.agreeToTerms) {
+      newErrors.agreeToTerms = 'You must accept the Terms of Service and Content Publishing Agreement'
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -96,6 +106,42 @@ export function SignInForm() {
       </div>
 
       <Sparkles />
+
+      {showTerms && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-[#0d0812] p-6 shadow-xl">
+            <h2 className="mb-4 text-xl font-bold text-white">Terms of Service & Content Publishing Agreement</h2>
+            <div className="prose prose-sm prose-invert">
+              <h3 className="text-lg font-semibold">1. Content Publishing Terms</h3>
+              <p>By accepting these terms, you acknowledge and agree that:</p>
+              <ul className="list-disc pl-5 text-sm text-gray-300">
+                <li>All projects you submit will be published on our platform and visible to other users</li>
+                <li>You retain ownership of your intellectual property rights</li>
+                <li>You grant us a non-exclusive license to display and share your content</li>
+                <li>You warrant that your submissions don&apos;t infringe on others&apos; rights</li>
+              </ul>
+
+              <h3 className="mt-4 text-lg font-semibold">2. Privacy & Data Usage</h3>
+              <p className="text-sm text-gray-300">
+                Your content will be used to enhance platform functionality, including but not limited to recommendation systems and user matching features.
+              </p>
+
+              <h3 className="mt-4 text-lg font-semibold">3. Content Guidelines</h3>
+              <p className="text-sm text-gray-300">
+                All published content must adhere to academic integrity standards and university policies.
+              </p>
+            </div>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                onClick={() => setShowTerms(false)}
+                className="rounded-md bg-gray-600 px-4 py-2 text-sm text-white hover:bg-gray-500"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -170,6 +216,30 @@ export function SignInForm() {
                 >
                   Forgot Password?
                 </Link>
+              </div>
+
+              <div className="space-y-2">
+                <label className="flex items-start space-x-2 text-sm text-gray-500">
+                  <input
+                    type="checkbox"
+                    name="agreeToTerms"
+                    checked={formData.agreeToTerms}
+                    onChange={handleChange}
+                    className="mt-1 form-checkbox border-white/[0.02] bg-white/[0.02]"
+                  />
+                  <span>
+                    <button 
+                      type="button"
+                      onClick={() => setShowTerms(true)}
+                      className="text-purple-300 hover:text-purple-200 underline"
+                    >
+                      Terms of Service & Content Publishing Agreement
+                    </button>
+                  </span>
+                </label>
+                {errors.agreeToTerms && (
+                  <div className="text-sm text-red-400">{errors.agreeToTerms}</div>
+                )}
               </div>
 
               <Button

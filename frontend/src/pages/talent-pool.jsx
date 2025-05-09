@@ -305,7 +305,7 @@ export default function TalentPool() {
 
   const StudentCard = ({ student }) => (
     <div
-      className="hover:bg-white/8 cursor-pointer rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-purple-500/30 hover:shadow-lg"
+      className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-purple-500/30 hover:bg-white/8 hover:shadow-lg"
       onClick={() => setSelectedStudent(student)}
     >
       <div className="flex items-start justify-between">
@@ -370,7 +370,7 @@ export default function TalentPool() {
 
   const StudentListItem = ({ student }) => (
     <div
-      className="hover:bg-white/8 cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 transition-all hover:border-purple-500/30 hover:shadow-lg"
+      className="cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 transition-all hover:border-purple-500/30 hover:bg-white/8 hover:shadow-lg"
       onClick={() => setSelectedStudent(student)}
     >
       <div className="flex items-center justify-between">
@@ -434,101 +434,105 @@ export default function TalentPool() {
     </div>
   )
 
-  const StudentProfile = () => (
-    <div className="sticky top-24 rounded-xl border border-white/10 bg-white/5 p-6 shadow-lg">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white">Student Profile</h2>
-        <button
-          onClick={() => setSelectedStudent(null)}
-          className="rounded-full bg-white/5 p-1.5 text-gray-400 hover:bg-white/10 hover:text-white"
-          aria-label="Close profile"
-        >
-          <LucideX className="h-5 w-5" />
-        </button>
-      </div>
-      <div className="mb-6 flex flex-col items-center">
-        <img
-          src={selectedStudent.image}
-          alt={selectedStudent.name}
-          className="mb-4 h-24 w-24 rounded-full border border-white/10"
-        />
-        <h3 className="text-2xl font-medium text-white">{selectedStudent.name}</h3>
-        <p className="text-gray-400">
-          {selectedStudent.major} • {selectedStudent.year}
-        </p>
-        <p className="mt-1 text-gray-400">GPA: {selectedStudent.gpa}</p>
-        <div className="mt-4 flex space-x-3">
+  const StudentProfile = () => {
+    if (!selectedStudent) return null;
+    
+    return (
+      <div className="sticky top-24 rounded-xl border border-white/10 bg-white/5 p-6 shadow-lg">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-white">Student Profile</h2>
           <button
-            onClick={() => handleSaveStudent(selectedStudent)}
-            className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              isStudentSaved(selectedStudent.id)
-                ? 'bg-purple-600/20 text-purple-400'
-                : 'bg-white/5 text-white hover:bg-white/10'
-            }`}
+            onClick={() => setSelectedStudent(null)}
+            className="rounded-full bg-white/5 p-1.5 text-gray-400 hover:bg-white/10 hover:text-white"
+            aria-label="Close profile"
           >
-            {isStudentSaved(selectedStudent.id) ? (
-              <>
-                <LucideCheck className="mr-2 h-4 w-4" />
-                Saved
-              </>
-            ) : (
-              <>
-                <LucideBookmark className="mr-2 h-4 w-4" />
-                Save
-              </>
-            )}
-          </button>
-          <button className="flex items-center rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
-            <LucideMessageSquare className="mr-2 h-4 w-4" />
-            Message
+            <LucideX className="h-5 w-5" />
           </button>
         </div>
+        <div className="mb-6 flex flex-col items-center">
+          <img
+            src={selectedStudent.image}
+            alt={selectedStudent.name}
+            className="mb-4 h-24 w-24 rounded-full border border-white/10"
+          />
+          <h3 className="text-2xl font-medium text-white">{selectedStudent.name}</h3>
+          <p className="text-gray-400">
+            {selectedStudent.major} • {selectedStudent.year}
+          </p>
+          <p className="mt-1 text-gray-400">GPA: {selectedStudent.gpa}</p>
+          <div className="mt-4 flex space-x-3">
+            <button
+              onClick={() => handleSaveStudent(selectedStudent)}
+              className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                isStudentSaved(selectedStudent.id)
+                  ? 'bg-purple-600/20 text-purple-400'
+                  : 'bg-white/5 text-white hover:bg-white/10'
+              }`}
+            >
+              {isStudentSaved(selectedStudent.id) ? (
+                <>
+                  <LucideCheck className="mr-2 h-4 w-4" />
+                  Saved
+                </>
+              ) : (
+                <>
+                  <LucideBookmark className="mr-2 h-4 w-4" />
+                  Save
+                </>
+              )}
+            </button>
+            <button className="flex items-center rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
+              <LucideMessageSquare className="mr-2 h-4 w-4" />
+              Message
+            </button>
+          </div>
+        </div>
+        <div className="space-y-6">
+          <div>
+            <h4 className="mb-2 font-medium text-white">About</h4>
+            <p className="text-gray-300">{selectedStudent.bio}</p>
+          </div>
+          <div>
+            <h4 className="mb-2 font-medium text-white">Skills</h4>
+            <div className="flex flex-wrap gap-2">
+              {selectedStudent.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full bg-purple-900/30 px-3 py-1 text-xs text-purple-300"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h4 className="mb-2 font-medium text-white">Projects</h4>
+            <div className="space-y-3">
+              {selectedStudent.projects.map((project, index) => (
+                <div key={index} className="rounded-lg border border-white/10 bg-white/5 p-3">
+                  <h5 className="font-medium text-white">{project.name}</h5>
+                  <p className="text-sm text-gray-400">{project.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <h4 className="mb-2 font-medium text-white">Experience</h4>
+            <div className="space-y-3">
+              {selectedStudent.experience.map((exp, index) => (
+                <div key={index} className="rounded-lg border border-white/10 bg-white/5 p-3">
+                  <h5 className="font-medium text-white">{exp.position}</h5>
+                  <p className="text-sm text-gray-400">
+                    {exp.company} • {exp.duration}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="space-y-6">
-        <div>
-          <h4 className="mb-2 font-medium text-white">About</h4>
-          <p className="text-gray-300">{selectedStudent.bio}</p>
-        </div>
-        <div>
-          <h4 className="mb-2 font-medium text-white">Skills</h4>
-          <div className="flex flex-wrap gap-2">
-            {selectedStudent.skills.map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full bg-purple-900/30 px-3 py-1 text-xs text-purple-300"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h4 className="mb-2 font-medium text-white">Projects</h4>
-          <div className="space-y-3">
-            {selectedStudent.projects.map((project, index) => (
-              <div key={index} className="rounded-lg border border-white/10 bg-white/5 p-3">
-                <h5 className="font-medium text-white">{project.name}</h5>
-                <p className="text-sm text-gray-400">{project.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div>
-          <h4 className="mb-2 font-medium text-white">Experience</h4>
-          <div className="space-y-3">
-            {selectedStudent.experience.map((exp, index) => (
-              <div key={index} className="rounded-lg border border-white/10 bg-white/5 p-3">
-                <h5 className="font-medium text-white">{exp.position}</h5>
-                <p className="text-sm text-gray-400">
-                  {exp.company} • {exp.duration}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+    );
+  };
 
   const SavedTalentsPanel = () => (
     <div className="rounded-xl border border-white/10 bg-white/5 p-6 shadow-lg">

@@ -224,9 +224,10 @@ class ProfileView(APIView):
                 "major": user.major,
                 "profile_image": user.profile_image.url if user.profile_image else None,
                 "stats": {
-                    "followers_count": 55,
-                    "following_count": 413,
-                    "posts_count": 23
+                    "followers_count": 0,
+                    "following_count": 0,
+                    "posts_count": 0
+                    
                 }
 
             }
@@ -564,10 +565,16 @@ class UserPersonalInfoModify(APIView):
         last_name = request.data.get('last_name')
         major = request.data.get('major')
         year_in_college = request.data.get('year_in_college')
+        phone = request.data.get('phone')
+        username = request.data.get('username')
+        email = request.data.get('email')
         user.first_name = first_name
         user.last_name = last_name
         user.major = major
         user.year_in_college = year_in_college
+        user.phone = phone
+        user.username = username
+        user.email = email
         user.save()
         return Response({"message": "Personal info updated successfully."}, status=status.HTTP_200_OK)
     
@@ -594,3 +601,40 @@ class UserInterestsModify(APIView):
     
     
     
+class UserDeleteAccount(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        password = request.data.get('password')
+        
+        # Verify the user's password before deletion
+        if not user.check_password(password):
+            return Response(
+                {"message": "Incorrect password. Account deletion failed."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        user.delete()
+        return Response({"message": "Account deleted successfully."}, status=status.HTTP_200_OK)
+    
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+        
+        # Verify the current password is correct
+        if not user.check_password(current_password):
+            return Response(
+                {"message": "Current password is incorrect."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Set the new password
+        user.set_password(new_password)
+        user.save()
+        
+        return Response({"message": "Password changed successfully."}, status=status.HTTP_200_OK)

@@ -18,6 +18,10 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        return context
+
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(

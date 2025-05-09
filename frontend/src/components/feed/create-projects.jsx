@@ -59,11 +59,17 @@ export default function CreateProjects({
         throw new Error('Authentication token not found. Please sign in again.')
       }
 
+      // Convert "graduation project" to "graduation_project" to match Django model choices
+      let statusValue = projectFormData.status
+      if (statusValue === "graduation project") {
+        statusValue = "graduation_project"
+      }
+
       // Prepare form data for submission
       const formData = new FormData()
       formData.append('name', projectFormData.name)
       formData.append('description', projectFormData.description)
-      formData.append('status', projectFormData.status)
+      formData.append('status', statusValue)
       formData.append('tags', projectFormData.tags)
       formData.append('image', projectFormData.image)
       if (selectedYear) {
@@ -181,7 +187,7 @@ export default function CreateProjects({
                 <option value="planning">Planning</option>
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
-                <option value="graduation project">Graduation Project</option>  
+                <option value="graduation_project">Graduation Project</option>  
               </select>
             </div>
 

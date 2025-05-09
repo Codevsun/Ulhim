@@ -17,6 +17,7 @@ from .views import (
     UserPersonalInfoModify,
     UserSkillsModify,
     UserInterestsModify,
+    UserDeleteAccount
 )
 
 urlpatterns = [
@@ -36,4 +37,6 @@ urlpatterns = [
     path("user-personal-info-modify/", UserPersonalInfoModify.as_view(), name="user-personal-info-modify"),
     path("user-skills-modify/", UserSkillsModify.as_view(), name="user-skills-modify"),
     path("user-interests-modify/", UserInterestsModify.as_view(), name="user-interests-modify"),
+    path("user-delete-account/" , UserDeleteAccount.as_view(),name="user-delete-account")
+
 ]

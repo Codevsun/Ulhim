@@ -6,13 +6,14 @@ class PostSerializer(serializers.ModelSerializer):
     author = StudentUserSerializer(read_only=True)
     like_count = serializers.SerializerMethodField()
     comment_count = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
     
     class Meta:
         model = Post
         fields = [
             'id', 'author', 'content', 'tag', 'image',
             'created_at', 'like_count', 'comment_count',
-            'inspired_count', 'level', 'major', 'slug'
+            'inspired_count', 'level', 'major', 'slug', 'is_liked'
         ]
         read_only_fields = ['author', 'slug']
 
@@ -21,6 +22,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_comment_count(self, obj):
         return obj.comments.count()
+        
+    def get_is_liked(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.likes.filter(user=request.user).exists()
+        return False
 
 class ProjectSerializer(serializers.ModelSerializer):
     author = StudentUserSerializer(read_only=True)

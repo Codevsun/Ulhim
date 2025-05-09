@@ -22,7 +22,7 @@ class BaseModel(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    major = models.CharField(max_length=20, choices=MAJOR_CHOICES, default='cs')
+    major = models.CharField(max_length=30, choices=MAJOR_CHOICES, default='cs')  # Increased from 20 to 30
     
     class Meta:
         abstract = True
@@ -44,7 +44,7 @@ class Post(BaseModel):
     ]
 
     content = models.TextField(max_length=255)
-    tag = models.CharField(max_length=20, choices=TAG_CHOICES)
+    tag = models.CharField(max_length=30, choices=TAG_CHOICES)  # Increased from 20 to 30
     image = models.ImageField(
         upload_to='posts/%Y/%m/%d/',
         null=True,
@@ -75,12 +75,12 @@ class Project(BaseModel):
         ('planning', 'Planning'),
         ('in_progress', 'In Progress'),
         ('completed', 'Completed'),
-        ('graduation project', 'Graduation Project'),
+        ('graduation_project', 'Graduation Project'),  # Changed to underscore
     ]
 
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='planning')
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='planning')  # Increased from 20 to 30
     tags = models.CharField(max_length=255, blank=True)
     image = models.ImageField(
         upload_to='projects/%Y/%m/%d/',

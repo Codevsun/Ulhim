@@ -6,6 +6,7 @@ import api from '../services/api'
 export default function Years() {
   const { yearNumber } = useParams()
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState({
     posts: {
       total: 0,
@@ -31,11 +32,14 @@ export default function Years() {
 
   useEffect(() => {
     const fetchYearStats = async () => {
+      setIsLoading(true)
       try {
-        const response = await api.get(`year/${yearNumber}/stats/`)
+        const response = await api.get(`year-stats/${yearNumber}/`)
         setStats(response.data)
       } catch (error) {
         console.error('Failed to fetch year stats', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -48,6 +52,16 @@ export default function Years() {
 
   const handleProjectStatusClick = (status) => {
     navigate(`/year/${yearNumber}/projects/${status}`)
+  }
+
+  if (isLoading) {
+    return (
+      <Profile>
+        <div className="col-span-6 flex h-screen items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+        </div>
+      </Profile>
+    )
   }
 
   return (

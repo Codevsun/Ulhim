@@ -20,6 +20,7 @@ import TalentPool from './pages/talent-pool'
 import CompanyMessages from './pages/companyMessages'
 import Groups from './pages/groups'
 import Companies from './pages/companies'
+import Settings from './pages/settings'
 const queryClient = new QueryClient()
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
           <Route path="/signup/*" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Landing />} />
           <Route path="/profile" element={<DashboardProfile />} />
